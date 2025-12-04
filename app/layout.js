@@ -3,28 +3,33 @@ import Sidebar from "../components/Sidebar";
 
 export const metadata = {
   title: "ERP SELLER",
-  description: "Hệ thống ERP Seller",
+  description: "ERP Seller CRM",
 };
 
 export default function RootLayout({ children }) {
   return (
     <html lang="vi">
-      <body style={{ margin: 0, padding: 0 }}>
-        <div style={{ display: "flex", minHeight: "100vh" }}>
-          {/* Sidebar cố định bên trái */}
-          <Sidebar />
+      <body
+        style={{
+          margin: 0,
+          padding: 0,
+          display: "flex",
+          minHeight: "100vh",
+        }}
+      >
+        {/* Sidebar */}
+        <Sidebar />
 
-          {/* Nội dung bên phải */}
-          <div
-            style={{
-              flex: 1,
-              padding: "32px",
-              backgroundColor: "#ffffff",
-              overflowY: "auto",
-            }}
-          >
-            {children}
-          </div>
+        {/* Content */}
+        <div
+          style={{
+            flex: 1,
+            padding: "32px 48px",
+            backgroundColor: "#ffffff",
+            overflowY: "auto",
+          }}
+        >
+          {children}
         </div>
       </body>
     </html>
