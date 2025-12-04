@@ -28,13 +28,11 @@ body {
   margin-bottom: 20px;
 }
 
-/* Menu group title */
 .menu-group {
   margin: 20px 0 8px;
   font-weight: bold;
 }
 
-/* Menu item */
 .menu-item {
   padding: 10px 14px;
   margin-bottom: 6px;
@@ -43,18 +41,15 @@ body {
   transition: 0.2s;
 }
 
-/* Hover */
 .menu-item:hover {
   background-color: #ffe4e4;
 }
 
-/* Active (mục đang click) */
 .menu-item.active {
   background-color: #ffcccc;
   border: 1px solid #ff9999;
 }
 
-/* Main content */
 .main-content {
   margin-left: 260px;
   padding: 40px;
