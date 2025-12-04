@@ -1,5 +1,6 @@
 import "./globals.css";
 import Sidebar from "../components/Sidebar";
+import Header from "../components/Header";
 
 export const metadata = {
   title: "ERP SELLER – Base",
@@ -12,9 +13,9 @@ export default function RootLayout({ children }) {
       <body>
         <Sidebar />
 
-        {/* Khung nội dung dịch sang phải 260px */}
-        <div style={{ marginLeft: "260px", padding: "20px" }}>
-          {children}
+        <div style={{ marginLeft: "260px" }}>
+          <Header />
+          <main style={{ padding: "20px" }}>{children}</main>
         </div>
       </body>
     </html>
