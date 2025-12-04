@@ -1,16 +1,13 @@
 export default function Sidebar() {
   const menu = [
-    {
-      group: "Tổng quan",
-      items: ["Dashboard"],
-    },
+    { group: "Tổng quan", items: ["Dashboard"] },
     {
       group: "Cấu hình shop",
       items: [
         "Cửa hàng & Thương hiệu",
         "Sản phẩm / Dịch vụ",
         "Tệp khách hàng",
-        "Kênh bán hàng",
+        "Kênh bán hàng"
       ],
     },
     {
@@ -19,12 +16,12 @@ export default function Sidebar() {
         "Nội dung AI",
         "Tin nhắn CSKH",
         "Livestream & Video script",
-        "Lịch đăng bài 30 ngày",
+        "Lịch đăng bài 30 ngày"
       ],
     },
     {
       group: "Thiết kế",
-      items: ["Mẫu thiết kế"],
+      items: ["Mẫu thiết kế", "Logo AI"],
     },
     {
       group: "Hệ thống",
@@ -37,33 +34,53 @@ export default function Sidebar() {
       style={{
         width: "260px",
         backgroundColor: "#f3f4f6",
-        minHeight: "100vh",
-        padding: "20px",
+        height: "100vh",
+        padding: "24px",
         borderRight: "1px solid #e5e7eb",
-        overflowY: "auto",
       }}
     >
-      <h2 style={{ fontSize: "22px", fontWeight: "bold", marginBottom: "20px", color: "#b91c1c" }}>
+      {/* Logo */}
+      <h2
+        style={{
+          fontSize: "22px",
+          fontWeight: "700",
+          marginBottom: "32px",
+          color: "#b91c1c",
+        }}
+      >
         ERP SELLER
       </h2>
 
+      {/* Menu */}
       {menu.map((section, index) => (
-        <div key={index} style={{ marginBottom: "20px" }}>
-          <div style={{ fontSize: "14px", fontWeight: "bold", marginBottom: "10px" }}>
+        <div key={index} style={{ marginBottom: "28px" }}>
+          <p
+            style={{
+              fontWeight: "600",
+              marginBottom: "10px",
+              color: "#374151",
+            }}
+          >
             {section.group}
-          </div>
+          </p>
 
           {section.items.map((item, idx) => (
-            <div
+            <p
               key={idx}
               style={{
-                padding: "6px 0",
-                fontSize: "14px",
+                padding: "8px 10px",
+                borderRadius: "6px",
                 cursor: "pointer",
+                marginBottom: "6px",
+                transition: "0.2s",
               }}
+              onMouseEnter={(e) =>
+                (e.target.style.backgroundColor = "#ffe4e6")
+              }
+              onMouseLeave={(e) => (e.target.style.backgroundColor = "transparent")}
             >
               {item}
-            </div>
+            </p>
           ))}
         </div>
       ))}
