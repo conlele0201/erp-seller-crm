@@ -1,3 +1,7 @@
+"use client";
+
+import Link from "next/link";
+
 export default function Sidebar() {
   return (
     <div
@@ -19,38 +23,84 @@ export default function Sidebar() {
         ERP SELLER
       </h2>
 
+      {/* --- Tổng quan --- */}
       <div className="sidebar-section">
         <p className="sidebar-title">Tổng quan</p>
-        <a className="sidebar-item active">Dashboard</a>
+        <Link href="/" className="sidebar-item active">
+          Dashboard
+        </Link>
       </div>
 
+      {/* --- Cấu hình shop --- */}
       <div className="sidebar-section">
         <p className="sidebar-title">Cấu hình shop</p>
-        <a className="sidebar-item">Cửa hàng & Thương hiệu</a>
-        <a className="sidebar-item">Sản phẩm / Dịch vụ</a>
-        <a className="sidebar-item">Tệp khách hàng</a>
-        <a className="sidebar-item">Kênh bán hàng</a>
+
+        <Link href="/shop" className="sidebar-item">
+          Cửa hàng & Thương hiệu
+        </Link>
+
+        <Link href="/products" className="sidebar-item">
+          Sản phẩm / Dịch vụ
+        </Link>
+
+        <Link href="/customers" className="sidebar-item">
+          Tệp khách hàng
+        </Link>
+
+        <Link href="/channels" className="sidebar-item">
+          Kênh bán hàng
+        </Link>
       </div>
 
+      {/* --- Nội dung & AI --- */}
       <div className="sidebar-section">
         <p className="sidebar-title">Nội dung & AI</p>
-        <a className="sidebar-item">Nội dung AI</a>
-        <a className="sidebar-item">Tin nhắn CSKH</a>
-        <a className="sidebar-item">Livestream & Video script</a>
-        <a className="sidebar-item">Lịch đăng bài 30 ngày</a>
-        <a className="sidebar-item">Chiến dịch Marketing</a>
+
+        <Link href="/ai-content" className="sidebar-item">
+          Nội dung AI
+        </Link>
+
+        <Link href="/message" className="sidebar-item">
+          Tin nhắn CSKH
+        </Link>
+
+        <Link href="/script" className="sidebar-item">
+          Livestream & Video script
+        </Link>
+
+        <Link href="/calendar" className="sidebar-item">
+          Lịch đăng bài 30 ngày
+        </Link>
+
+        <Link href="/campaign" className="sidebar-item">
+          Chiến dịch Marketing
+        </Link>
       </div>
 
+      {/* --- Thiết kế --- */}
       <div className="sidebar-section">
         <p className="sidebar-title">Thiết kế</p>
-        <a className="sidebar-item">Mẫu thiết kế</a>
-        <a className="sidebar-item">Logo AI</a>
+
+        <Link href="/design" className="sidebar-item">
+          Mẫu thiết kế
+        </Link>
+
+        <Link href="/logo-ai" className="sidebar-item">
+          Logo AI
+        </Link>
       </div>
 
+      {/* --- Hệ thống --- */}
       <div className="sidebar-section">
         <p className="sidebar-title">Hệ thống</p>
-        <a className="sidebar-item">Gói dịch vụ</a>
-        <a className="sidebar-item">Quản trị hệ thống</a>
+
+        <Link href="/plans" className="sidebar-item">
+          Gói dịch vụ
+        </Link>
+
+        <Link href="/system" className="sidebar-item">
+          Quản trị hệ thống
+        </Link>
       </div>
     </div>
   );
