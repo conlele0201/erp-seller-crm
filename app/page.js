@@ -1,33 +1,36 @@
-export default function Home() {
+export default function HomePage() {
   return (
-    <div>
-      <h1 style={{ fontSize: "24px", fontWeight: "700" }}>
-        Chào mừng bạn đến hệ thống ERP SELLER
-      </h1>
+    <>
+      <header className="page-header">
+        <h1>ERP SELLER</h1>
+      </header>
 
-      <p>
-        Đây là trang tổng quan của ứng dụng. Bạn có thể bắt đầu bằng cách chọn các chức năng ở menu bên trái.
-      </p>
+      <section>
+        <h2 className="page-title">
+          Chào mừng bạn đến hệ thống ERP SELLER
+        </h2>
+        <p className="page-intro">
+          Đây là trang tổng quan của ứng dụng. Bạn có thể bắt đầu bằng cách
+          chọn các chức năng ở menu bên trái.
+        </p>
 
-      <h3>Các nhóm chức năng chính:</h3>
-
-      <ul>
-        <li>
-          Cấu hình shop: Cửa hàng & Thương hiệu, Sản phẩm / Dịch vụ, Tệp khách hàng.
-        </li>
-        <li>
-          Nội dung & AI: Nội dung AI, Tin nhắn CSKH, Livestream & Video script.
-        </li>
-        <li>
-          Lịch & Chiến dịch: Lịch đăng bài 30 ngày, Chiến dịch Marketing.
-        </li>
-        <li>
-          Thiết kế: Mẫu thiết kế, Logo AI.
-        </li>
-        <li>
-          Hệ thống: Gói dịch vụ, Quản trị hệ thống.
-        </li>
-      </ul>
-    </div>
+        <h3 className="page-subtitle">Các nhóm chức năng chính:</h3>
+        <ul className="feature-list">
+          <li>
+            Cấu hình shop: Cửa hàng &amp; Thương hiệu, Sản phẩm / Dịch vụ, Tệp
+            khách hàng.
+          </li>
+          <li>
+            Nội dung &amp; AI: Nội dung AI, Tin nhắn CSKH, Livestream &amp;
+            Video script.
+          </li>
+          <li>
+            Lịch &amp; Chiến dịch: Lịch đăng bài 30 ngày, Chiến dịch Marketing.
+          </li>
+          <li>Thiết kế: Mẫu thiết kế, Logo AI.</li>
+          <li>Hệ thống: Gói dịch vụ, Quản trị hệ thống.</li>
+        </ul>
+      </section>
+    </>
   );
 }
