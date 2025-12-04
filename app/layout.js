@@ -11,7 +11,11 @@ export default function RootLayout({ children }) {
     <html lang="vi">
       <body>
         <Sidebar />
-        {children}
+
+        {/* Khung nội dung dịch sang phải 260px */}
+        <div style={{ marginLeft: "260px", padding: "20px" }}>
+          {children}
+        </div>
       </body>
     </html>
   );
