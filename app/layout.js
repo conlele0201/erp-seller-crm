@@ -9,27 +9,12 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="vi">
-      <body
-        style={{
-          margin: 0,
-          padding: 0,
-          display: "flex",
-          minHeight: "100vh",
-        }}
-      >
-        {/* Sidebar */}
-        <Sidebar />
-
-        {/* Content */}
-        <div
-          style={{
-            flex: 1,
-            padding: "32px 48px",
-            backgroundColor: "#ffffff",
-            overflowY: "auto",
-          }}
-        >
-          {children}
+      <body style={{ margin: 0, padding: 0 }}>
+        <div className="layout">
+          <Sidebar />
+          <main className="main-content">
+            {children}
+          </main>
         </div>
       </body>
     </html>
