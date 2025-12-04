@@ -25,11 +25,12 @@ export default function Sidebar() {
       </h2>
 
       <div style={{ fontSize: 14, lineHeight: 1.6 }}>
+
         {/* Tổng quan */}
         <div style={{ marginBottom: 8, fontWeight: 700, color: "#374151" }}>
           Tổng quan
         </div>
-        <div style={{ marginBottom: 4 }}>• Dashboard</div>
+        <div className="sidebar-item">Dashboard</div>
 
         {/* Cấu hình shop */}
         <div
@@ -42,10 +43,10 @@ export default function Sidebar() {
         >
           Cấu hình shop
         </div>
-        <div>• Cửa hàng &amp; Thương hiệu</div>
-        <div>• Sản phẩm / Dịch vụ</div>
-        <div>• Tệp khách hàng</div>
-        <div>• Kênh bán hàng</div>
+        <div className="sidebar-item">Cửa hàng &amp; Thương hiệu</div>
+        <div className="sidebar-item">Sản phẩm / Dịch vụ</div>
+        <div className="sidebar-item">Tệp khách hàng</div>
+        <div className="sidebar-item">Kênh bán hàng</div>
 
         {/* Nội dung & AI */}
         <div
@@ -58,11 +59,11 @@ export default function Sidebar() {
         >
           Nội dung &amp; AI
         </div>
-        <div>• Nội dung AI</div>
-        <div>• Tin nhắn CSKH</div>
-        <div>• Livestream &amp; Video script</div>
-        <div>• Lịch đăng bài 30 ngày</div>
-        <div>• Chiến dịch Marketing</div>
+        <div className="sidebar-item">Nội dung AI</div>
+        <div className="sidebar-item">Tin nhắn CSKH</div>
+        <div className="sidebar-item">Livestream &amp; Video script</div>
+        <div className="sidebar-item">Lịch đăng bài 30 ngày</div>
+        <div className="sidebar-item">Chiến dịch Marketing</div>
 
         {/* Thiết kế */}
         <div
@@ -75,8 +76,8 @@ export default function Sidebar() {
         >
           Thiết kế
         </div>
-        <div>• Mẫu thiết kế</div>
-        <div>• Logo AI</div>
+        <div className="sidebar-item">Mẫu thiết kế</div>
+        <div className="sidebar-item">Logo AI</div>
 
         {/* Hệ thống */}
         <div
@@ -89,9 +90,10 @@ export default function Sidebar() {
         >
           Hệ thống
         </div>
-        <div>• Gói dịch vụ</div>
-        <div>• Quản trị hệ thống</div>
-        <div>• Đăng xuất</div>
+        <div className="sidebar-item">Gói dịch vụ</div>
+        <div className="sidebar-item">Quản trị hệ thống</div>
+        <div className="sidebar-item">Đăng xuất</div>
+
       </div>
     </div>
   );
