@@ -1,3 +1,4 @@
+/* Reset */
 * {
   margin: 0;
   padding: 0;
@@ -5,33 +6,56 @@
 }
 
 body {
-  background-color: #fafafa;
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
-    sans-serif;
-}
-
-/* ====== SIDEBAR ITEM – CHO NỀN TRÀN FULL 2 BÊN ====== */
-/* Sidebar hiện đang có padding-left/right: 20px
-   => Dùng margin âm -20px để nền của item tràn sát viền trái/phải
-*/
-.sidebar-item {
-  display: block;
-  padding: 10px 20px;
-  margin: 0 -20px 4px; /* TRICK quan trọng: tràn ra 2 bên 20px */
-  cursor: pointer;
-  font-size: 14px;
+  font-family: Arial, sans-serif;
+  background-color: #ffffff;
   color: #333;
-  transition: background-color 0.15s ease, color 0.15s ease;
 }
 
-/* Màu khi hover */
-.sidebar-item:hover {
-  background-color: #ffe3e3;
+/* Sidebar */
+.sidebar {
+  width: 260px;
+  height: 100vh;
+  background-color: #f3f4f6;
+  border-right: 1px solid #e5e7eb;
+  padding: 20px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  overflow-y: auto;
 }
 
-/* Màu khi active (nếu anh gắn class="sidebar-item active") */
-.sidebar-item.active {
-  background-color: #fecaca;
-  color: #b91c1c;
-  font-weight: 600;
+.sidebar h2 {
+  margin-bottom: 20px;
+}
+
+/* Menu group title */
+.menu-group {
+  margin: 20px 0 8px;
+  font-weight: bold;
+}
+
+/* Menu item */
+.menu-item {
+  padding: 10px 14px;
+  margin-bottom: 6px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+/* Hover */
+.menu-item:hover {
+  background-color: #ffe4e4;
+}
+
+/* Active (mục đang click) */
+.menu-item.active {
+  background-color: #ffcccc;
+  border: 1px solid #ff9999;
+}
+
+/* Main content */
+.main-content {
+  margin-left: 260px;
+  padding: 40px;
 }
