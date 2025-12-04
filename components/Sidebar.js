@@ -1,91 +1,53 @@
 export default function Sidebar() {
+  const menuItems = [
+    { label: "Dashboard" },
+    { label: "Cửa hàng & Thương hiệu" },
+    { label: "Sản phẩm / Dịch vụ" },
+    { label: "Tệp khách hàng" },
+    { label: "Kênh bán hàng" },
+    { label: "Nội dung AI" },
+    { label: "Tin nhắn CSKH" },
+    { label: "Livestream & Video script" },
+    { label: "Lịch đăng bài 30 ngày" },
+    { label: "Chiến dịch Marketing" },
+    { label: "Mẫu thiết kế" },
+    { label: "Logo AI" },
+    { label: "Gói dịch vụ" },
+    { label: "Quản trị hệ thống" }
+  ];
+
   return (
     <div
       style={{
         width: "260px",
-        backgroundColor: "#f3f4f6",
         height: "100vh",
+        backgroundColor: "#f3f4f6",
         padding: "20px",
-        borderRight: "1px solid #e5e7eb",
         position: "fixed",
         top: 0,
         left: 0,
-        overflowY: "auto"
+        overflowY: "auto",
+        borderRight: "1px solid #e5e7eb",
       }}
     >
-      <h2
-        style={{
-          fontSize: 18,
-          fontWeight: 700,
-          marginBottom: 20
-        }}
-      >
+      <h2 style={{ marginBottom: "20px", color: "#c70039", fontWeight: "700" }}>
         ERP SELLER
       </h2>
 
-      <div style={{ fontSize: 14, lineHeight: 1.6 }}>
-        {/* Tổng quan */}
-        <div style={{ marginBottom: 12, fontWeight: 600 }}>Tổng quan</div>
-        <div>• Dashboard</div>
-
-        {/* Cấu hình shop */}
+      {menuItems.map((item, index) => (
         <div
+          key={index}
+          className="sidebar-item"
           style={{
-            marginTop: 16,
-            marginBottom: 8,
-            fontWeight: 600
+            padding: "10px 12px",
+            cursor: "pointer",
+            borderRadius: "6px",
+            marginBottom: "4px",
           }}
         >
-          Cấu hình shop
+          {item.label}
         </div>
-        <div>• Cửa hàng &amp; Thương hiệu</div>
-        <div>• Sản phẩm / Dịch vụ</div>
-        <div>• Tệp khách hàng</div>
-        <div>• Kênh bán hàng</div>
-
-        {/* Nội dung & AI */}
-        <div
-          style={{
-            marginTop: 16,
-            marginBottom: 8,
-            fontWeight: 600
-          }}
-        >
-          Nội dung &amp; AI
-        </div>
-        <div>• Nội dung AI</div>
-        <div>• Tin nhắn CSKH</div>
-        <div>• Livestream &amp; Video script</div>
-        <div>• Lịch đăng bài 30 ngày</div>
-        <div>• Chiến dịch Marketing</div>
-
-        {/* Thiết kế */}
-        <div
-          style={{
-            marginTop: 16,
-            marginBottom: 8,
-            fontWeight: 600
-          }}
-        >
-          Thiết kế
-        </div>
-        <div>• Mẫu thiết kế</div>
-        <div>• Logo AI</div>
-
-        {/* Hệ thống */}
-        <div
-          style={{
-            marginTop: 16,
-            marginBottom: 8,
-            fontWeight: 600
-          }}
-        >
-          Hệ thống
-        </div>
-        <div>• Gói dịch vụ</div>
-        <div>• Quản trị hệ thống</div>
-        <div>• Đăng xuất</div>
-      </div>
+      ))}
     </div>
   );
 }
