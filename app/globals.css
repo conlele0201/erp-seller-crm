@@ -1,4 +1,45 @@
 body {
   margin: 0;
+  padding: 0;
   font-family: Arial, sans-serif;
+}
+
+/* Sidebar */
+.sidebar {
+  width: 260px;
+  height: 100vh;
+  background: #f3f4f6;
+  border-right: 1px solid #e5e7eb;
+  padding: 20px;
+  position: fixed;
+  left: 0;
+  top: 0;
+  overflow-y: auto;
+}
+
+.sidebar-section-title {
+  margin-top: 20px;
+  font-weight: bold;
+  color: #374151;
+}
+
+.sidebar-item {
+  padding: 10px 14px;
+  margin: 6px 0;
+  border-radius: 6px;
+  cursor: pointer;
+  display: block;
+}
+
+/* Hover đỏ nhạt */
+.sidebar-item:hover {
+  background-color: #ffe5e5;
+}
+
+/* Active đỏ FULL TRÀN HAI BÊN – KHÔNG HỞ */
+.sidebar-item.active {
+  background-color: #ffcccc;
+  width: calc(100% - 0px);
+  margin-left: 0;
+  margin-right: 0;
 }
