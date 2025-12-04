@@ -1,172 +1,56 @@
-// pages/khach-hang/index.js
-import Layout from "../../components/Layout";
-
-export default function KhachHangPage() {
-  const customers = [
-    {
-      id: 1,
-      name: "Ngọc Anh",
-      phone: "0901234567",
-      gender: "Nữ",
-      tag: "VIP",
-      total: "12,500,000đ",
-      visits: 8,
-      last: "02/12/2025",
-    },
-    {
-      id: 2,
-      name: "Minh Khoa",
-      phone: "0938765432",
-      gender: "Nam",
-      tag: "Khách mới",
-      total: "4,200,000đ",
-      visits: 3,
-      last: "28/11/2025",
-    },
-    {
-      id: 3,
-      name: "Thu Hà",
-      phone: "0912345789",
-      gender: "Nữ",
-      tag: "Khách quen",
-      total: "7,800,000đ",
-      visits: 5,
-      last: "25/11/2025",
-    },
-  ];
-
+export default function Sidebar() {
   return (
-    <Layout>
-      <div>
-        <h1 style={{ fontSize: 32, fontWeight: 700, marginBottom: 24 }}>
-          Quản lý khách hàng
-        </h1>
+    <div
+      style={{
+        width: "260px",
+        backgroundColor: "#f3f4f6",
+        height: "100vh",
+        padding: "20px",
+        borderRight: "1px solid #e5e7eb",
+        position: "fixed",
+        top: 0,
+        left: 0,
+        overflowY: "auto"
+      }}
+    >
+      <h2 style={{ fontSize: 18, fontWeight: 700, marginBottom: 20 }}>
+        ERP SELLER
+      </h2>
 
-        {/* Thanh công cụ */}
-        <div
-          style={{
-            display: "flex",
-            gap: 12,
-            marginBottom: 20,
-            alignItems: "center",
-          }}
-        >
-          <input
-            placeholder="Tìm theo tên hoặc số điện thoại..."
-            style={{
-              flex: 1,
-              padding: "10px 14px",
-              borderRadius: 999,
-              border: "1px solid #ddd",
-              outline: "none",
-              fontSize: 14,
-            }}
-          />
-          <select
-            style={{
-              padding: "10px 14px",
-              borderRadius: 999,
-              border: "1px solid #ddd",
-              fontSize: 14,
-            }}
-          >
-            <option>Tất cả</option>
-            <option>VIP</option>
-            <option>Khách mới</option>
-            <option>Khách quen</option>
-          </select>
-          <button
-            style={{
-              padding: "10px 18px",
-              borderRadius: 999,
-              border: "none",
-              background: "#f973b4",
-              color: "#fff",
-              fontWeight: 600,
-              fontSize: 14,
-              cursor: "pointer",
-            }}
-          >
-            + Thêm khách hàng
-          </button>
-        </div>
+      <div style={{ fontSize: 14, lineHeight: 1.6 }}>
+        <div style={{ marginBottom: 12, fontWeight: 600 }}>Tổng quan</div>
+        <div>• Dashboard</div>
 
-        {/* Bảng khách hàng */}
-        <div
-          style={{
-            background: "#fff",
-            borderRadius: 20,
-            padding: 20,
-            boxShadow: "0 18px 40px rgba(15,23,42,0.06)",
-          }}
-        >
-          <table
-            style={{ width: "100%", borderCollapse: "collapse", fontSize: 14 }}
-          >
-            <thead>
-              <tr style={{ background: "#ffe2ee" }}>
-                <th style={th}>Tên khách</th>
-                <th style={th}>Số điện thoại</th>
-                <th style={th}>Giới tính</th>
-                <th style={th}>Tag</th>
-                <th style={th}>Tổng chi tiêu</th>
-                <th style={th}>Lần đến</th>
-                <th style={th}>Gần nhất</th>
-                <th style={th}>Thao tác</th>
-              </tr>
-            </thead>
-            <tbody>
-              {customers.map((c) => (
-                <tr key={c.id} style={{ borderBottom: "1px solid #eee" }}>
-                  <td style={td}>{c.name}</td>
-                  <td style={td}>{c.phone}</td>
-                  <td style={td}>{c.gender}</td>
-                  <td style={td}>
-                    <span
-                      style={{
-                        padding: "4px 10px",
-                        borderRadius: 999,
-                        background: "#ffd6e8",
-                        fontSize: 12,
-                        fontWeight: 600,
-                      }}
-                    >
-                      {c.tag}
-                    </span>
-                  </td>
-                  <td style={td}>{c.total}</td>
-                  <td style={td}>{c.visits}</td>
-                  <td style={td}>{c.last}</td>
-                  <td style={td}>
-                    <button
-                      style={{
-                        padding: "6px 12px",
-                        borderRadius: 999,
-                        border: "1px solid #ddd",
-                        background: "#fff",
-                        cursor: "pointer",
-                        fontSize: 13,
-                      }}
-                    >
-                      Xem
-                    </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+        <div style={{ marginTop: 16, marginBottom: 8, fontWeight: 600 }}>
+          Cấu hình shop
         </div>
+        <div>• Cửa hàng &amp; Thương hiệu</div>
+        <div>• Sản phẩm / Dịch vụ</div>
+        <div>• Tệp khách hàng</div>
+        <div>• Kênh bán hàng</div>
+
+        <div style={{ marginTop: 16, marginBottom: 8, fontWeight: 600 }}>
+          Nội dung &amp; AI
+        </div>
+        <div>• Nội dung AI</div>
+        <div>• Tin nhắn CSKH</div>
+        <div>• Livestream &amp; Video script</div>
+        <div>• Lịch đăng bài 30 ngày</div>
+        <div>• Chiến dịch Marketing</div>
+
+        <div style={{ marginTop: 16, marginBottom: 8, fontWeight: 600 }}>
+          Thiết kế
+        </div>
+        <div>• Mẫu thiết kế</div>
+        <div>• Logo AI</div>
+
+        <div style={{ marginTop: 16, marginBottom: 8, fontWeight: 600 }}>
+          Hệ thống
+        </div>
+        <div>• Gói dịch vụ</div>
+        <div>• Quản trị hệ thống</div>
+        <div>• Đăng xuất</div>
       </div>
-    </Layout>
+    </div>
   );
 }
-
-const th = {
-  padding: "10px 12px",
-  textAlign: "left",
-  fontWeight: 600,
-};
-
-const td = {
-  padding: "10px 12px",
-};
