@@ -1,5 +1,6 @@
+// app/layout.js
 import "./globals.css";
-import Sidebar from "@/components/Sidebar";
+import Sidebar from "../components/Sidebar";
 
 export const metadata = {
   title: "ERP SELLER",
@@ -10,14 +11,16 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body>
-        <div style={{ display: "flex", height: "100vh" }}>
-          {/* Sidebar trái */}
+        <div style={{ display: "flex", minHeight: "100vh" }}>
+          {/* Cột trái: Sidebar */}
           <Sidebar />
 
-          {/* Nội dung bên phải */}
-          <div style={{ flex: 1, padding: "20px" }}>
-            <h2 style={{ fontWeight: "600", fontSize: "20px" }}>ERP SELLER</h2>
-            <hr style={{ margin: "20px 0" }} />
+          {/* Cột phải: nội dung */}
+          <div style={{ flex: 1, padding: "20px 32px" }}>
+            <h2 style={{ fontWeight: 600, fontSize: "20px", marginBottom: "12px" }}>
+              ERP SELLER
+            </h2>
+            <hr style={{ marginBottom: "24px" }} />
             {children}
           </div>
         </div>
