@@ -3,3 +3,32 @@
   padding: 0;
   box-sizing: border-box;
 }
+
+body {
+  background-color: #fafafa;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
+/* ===== SIDEBAR ERP – HOVER & ACTIVE ===== */
+
+.sidebar-item {
+  padding: 8px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  color: #333333;
+  margin-bottom: 4px;
+  transition: all 0.2s ease;
+}
+
+/* Hover đỏ nhẹ */
+.sidebar-item:hover {
+  background-color: #ffebee;       /* đỏ nhạt */
+  color: #b71c1c;
+}
+
+/* Trạng thái active (sau này gắn class active) */
+.sidebar-item.active {
+  background-color: #b71c1c;       /* đỏ đậm */
+  color: #ffffff !important;
+  font-weight: 700;
+}
