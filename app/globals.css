@@ -6,30 +6,32 @@
 
 body {
   background-color: #fafafa;
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+    sans-serif;
 }
 
-/* ===== SIDEBAR ERP ===== */
-
+/* ====== SIDEBAR ITEM – CHO NỀN TRÀN FULL 2 BÊN ====== */
+/* Sidebar hiện đang có padding-left/right: 20px
+   => Dùng margin âm -20px để nền của item tràn sát viền trái/phải
+*/
 .sidebar-item {
   display: block;
-  width: 100%;
-  padding: 10px 16px;
-  border-radius: 4px;
+  padding: 10px 20px;
+  margin: 0 -20px 4px; /* TRICK quan trọng: tràn ra 2 bên 20px */
   cursor: pointer;
+  font-size: 14px;
   color: #333;
-  transition: all 0.2s ease;
+  transition: background-color 0.15s ease, color 0.15s ease;
 }
 
-/* Hover đỏ chuẩn ERP */
+/* Màu khi hover */
 .sidebar-item:hover {
   background-color: #ffe3e3;
-  color: #b71c1c;
 }
 
-/* Active item */
+/* Màu khi active (nếu anh gắn class="sidebar-item active") */
 .sidebar-item.active {
-  background-color: #b71c1c;
-  color: #fff !important;
-  font-weight: 700;
+  background-color: #fecaca;
+  color: #b91c1c;
+  font-weight: 600;
 }
