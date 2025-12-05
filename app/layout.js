@@ -1,17 +1,19 @@
 import "./globals.css";
-import Sidebar from "../components/Sidebar";
 
 export const metadata = {
   title: "ERP SELLER",
-  description: "ERP Seller CRM",
+  description: "ERP Seller System",
 };
 
 export default function RootLayout({ children }) {
   return (
     <html lang="vi">
-      <body style={{ margin: 0, padding: 0 }}>
-        <div className="layout">
-          <Sidebar />
+      <body>
+        <div className="layout-container">
+          <aside className="sidebar">
+            {/* SIDEBAR ĐANG HOẠT ĐỘNG */}
+          </aside>
+
           <main className="main-content">
             {children}
           </main>
