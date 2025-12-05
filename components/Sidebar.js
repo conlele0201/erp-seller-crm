@@ -1,41 +1,64 @@
 export default function Sidebar() {
+  const menu = [
+    {
+      group: "Tổng quan",
+      items: ["Dashboard"]
+    },
+    {
+      group: "Cấu hình shop",
+      items: [
+        "Cửa hàng & Thương hiệu",
+        "Sản phẩm / Dịch vụ",
+        "Tệp khách hàng",
+        "Kênh bán hàng"
+      ]
+    },
+    {
+      group: "Nội dung & AI",
+      items: [
+        "Nội dung AI",
+        "Tin nhắn CSKH",
+        "Livestream & Video script",
+        "Lịch đăng bài 30 ngày"
+      ]
+    },
+    {
+      group: "Thiết kế",
+      items: ["Mẫu thiết kế"]
+    },
+    {
+      group: "Hệ thống",
+      items: ["Gói dịch vụ"]
+    }
+  ];
+
+  const searchParams = typeof window !== "undefined" ? window.location.pathname : "";
+  const activeItem = decodeURI(searchParams.replace("/", ""));
+
   return (
-    <aside className="sidebar">
-      <div className="sidebar-logo">ERP SELLER</div>
+    <div className="sidebar">
+      <h2 className="sidebar-title">ERP SELLER</h2>
 
-      <div className="sidebar-section">
-        <div className="sidebar-section-title">Tổng quan</div>
-        <div className="sidebar-item">Dashboard</div>
-      </div>
+      {menu.map((group, idx) => (
+        <div key={idx}>
+          <div className="sidebar-group-title">{group.group}</div>
 
-      <div className="sidebar-section">
-        <div className="sidebar-section-title">Cấu hình shop</div>
-        <div className="sidebar-item sidebar-item-active">
-          Cửa hàng &amp; Thương hiệu
+          {group.items.map((item) => {
+            const slug = item.toLowerCase().replace(/ /g, "-");
+            const isActive = activeItem.includes(slug);
+
+            return (
+              <a
+                key={item}
+                href={`/${slug}`}
+                className={`sidebar-item ${isActive ? "sidebar-item-active" : ""}`}
+              >
+                {item}
+              </a>
+            );
+          })}
         </div>
-        <div className="sidebar-item">Sản phẩm / Dịch vụ</div>
-        <div className="sidebar-item">Tệp khách hàng</div>
-        <div className="sidebar-item">Kênh bán hàng</div>
-      </div>
-
-      <div className="sidebar-section">
-        <div className="sidebar-section-title">Nội dung &amp; AI</div>
-        <div className="sidebar-item">Nội dung AI</div>
-        <div className="sidebar-item">Tin nhắn CSKH</div>
-        <div className="sidebar-item">Livestream &amp; Video script</div>
-        <div className="sidebar-item">Lịch đăng bài 30 ngày</div>
-      </div>
-
-      <div className="sidebar-section">
-        <div className="sidebar-section-title">Thiết kế</div>
-        <div className="sidebar-item">Mẫu thiết kế</div>
-      </div>
-
-      <div className="sidebar-section">
-        <div className="sidebar-section-title">Hệ thống</div>
-        <div className="sidebar-item">Gói dịch vụ</div>
-        <div className="sidebar-item">Quản trị hệ thống</div>
-      </div>
-    </aside>
+      ))}
+    </div>
   );
 }
