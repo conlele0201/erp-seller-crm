@@ -1,76 +1,63 @@
-/* RESET CƠ BẢN */
+/* Reset cơ bản */
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
 
-html,
-body {
+html, body {
   height: 100%;
+  width: 100%;
+  font-family: system-ui, sans-serif;
+  background: #ffffff;
 }
 
-body {
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
-    sans-serif;
-  background-color: #ffffff;
-  color: #111827;
-}
-
-/* SIDEBAR LAYOUT */
-.sidebar {
-  width: 260px;
-  background-color: #f3f4f6;
-  border-right: 1px solid #e5e7eb;
+/* ----------- LAYOUT 2 CỘT CHUẨN ----------- */
+.layout-container {
+  display: flex;
+  width: 100%;
   height: 100vh;
+}
+
+/* SIDEBAR */
+.sidebar {
+  width: 280px;
+  min-width: 280px;
+  background: #f3f4f6;
+  border-right: 1px solid #ddd;
+  overflow-y: auto;
+  padding: 20px;
+}
+
+/* CONTENT */
+.main-content {
+  flex: 1;
+  padding: 32px;
+  background: #fff;
   overflow-y: auto;
 }
 
-/* LOGO / TITLE */
-.sidebar-title {
-  font-size: 20px;
-  font-weight: 700;
-  padding: 20px 24px 16px 24px;
-}
-
-/* TIÊU ĐỀ NHÓM */
-.sidebar-group-title {
-  font-size: 14px;
-  font-weight: 700;
-  color: #4b5563;
-  margin-top: 20px;
-  margin-bottom: 8px;
-  padding: 0 24px;
-}
-
-/* ITEM MENU – TRÀN FULL 2 BÊN */
-.sidebar-item {
-  display: block;
+/* ACTIVE MENU */
+.menu-item.active {
+  background: #e53935 !important;
+  color: #fff !important;
+  font-weight: bold;
   width: 100%;
-  padding: 10px 24px;
-  font-size: 15px;
-  color: #111827;
-  background-color: transparent;
-  border: none;
-  text-align: left;
+  border-radius: 6px;
+}
+
+/* Hover menu */
+.menu-item:hover {
+  background: #ff4d4d;
+  color: #fff;
+}
+
+/* Menu item chuẩn */
+.menu-item {
+  display: block;
+  padding: 10px 14px;
+  margin-bottom: 6px;
+  border-radius: 6px;
   cursor: pointer;
-  transition: background-color 0.15s ease, color 0.15s ease;
-}
-
-/* HOVER: ĐỎ NHẠT */
-.sidebar-item:hover {
-  background-color: #fee2e2;
-  color: #b91c1c;
-}
-
-/* ACTIVE: ĐỎ ĐẬM – TRÀN HẾT 2 BÊN */
-.sidebar-item-active {
-  background-color: #ef4444;
-  color: #ffffff;
-  font-weight: 600;
-}
-
-/* ĐẢM BẢO NỘI DUNG BÊN PHẢI NỀN TRẮNG */
-main {
-  background-color: #ffffff;
+  transition: 0.2s;
 }
