@@ -1,3 +1,4 @@
+/* Reset */
 * {
   margin: 0;
   padding: 0;
@@ -5,32 +6,59 @@
 }
 
 html, body {
-  height: 100%;
-  width: 100%;
-  font-family: system-ui, sans-serif;
+  font-family: system-ui, Arial, sans-serif;
+  background: #ffffff;
+  color: #111;
 }
 
-/* LAYOUT 2 CỘT */
-.layout-container {
-  display: flex;
-  width: 100%;
-  height: 100vh;
-}
-
-/* SIDEBAR */
+/* Layout */
 .sidebar {
-  width: 280px;
-  min-width: 280px;
-  background: #f3f4f6;
+  width: 260px;
+  background: #f4f4f4;
   border-right: 1px solid #ddd;
+  height: 100vh;
+  padding: 28px 20px;
   overflow-y: auto;
-  padding: 20px;
 }
 
-/* CONTENT */
-.main-content {
+.sidebar-title {
+  font-size: 24px;
+  font-weight: 700;
+  margin-bottom: 20px;
+}
+
+.sidebar-section {
+  margin-top: 22px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #555;
+}
+
+.menu-item {
+  font-size: 15px;
+  padding: 10px 14px;
+  margin-top: 6px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: 0.15s ease;
+}
+
+/* Hover */
+.menu-item:hover {
+  background: #ff6961;
+  color: white;
+}
+
+/* Active item */
+.menu-item.active {
+  background: #ff3b30; /* đỏ đậm */
+  color: white;
+  font-weight: 600;
+  width: 100%;
+}
+
+/* Đảm bảo main không bị nhảy xuống */
+main {
   flex: 1;
   padding: 40px;
-  background: white;
-  overflow-y: auto;
 }
