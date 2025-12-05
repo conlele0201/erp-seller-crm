@@ -1,4 +1,5 @@
 import "./globals.css";
+import Sidebar from "./components/Sidebar";
 
 export const metadata = {
   title: "ERP SELLER",
@@ -10,10 +11,13 @@ export default function RootLayout({ children }) {
     <html lang="vi">
       <body>
         <div className="layout-container">
+
+          {/* SIDEBAR BÊN TRÁI */}
           <aside className="sidebar">
-            {/* SIDEBAR ĐANG HOẠT ĐỘNG */}
+            <Sidebar />
           </aside>
 
+          {/* NỘI DUNG BÊN PHẢI */}
           <main className="main-content">
             {children}
           </main>
