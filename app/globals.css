@@ -1,6 +1,6 @@
 /* app/globals.css */
 
-/* ----- Reset đơn giản ----- */
+/* Reset & base */
 *,
 *::before,
 *::after {
@@ -11,110 +11,103 @@ html,
 body {
   margin: 0;
   padding: 0;
-  min-height: 100%;
-}
-
-body {
   font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
     sans-serif;
   color: #111827;
   background-color: #ffffff;
 }
 
-/* ----- Layout tổng ----- */
+/* Khung tổng app: sidebar + nội dung */
 .app-shell {
   display: flex;
   min-height: 100vh;
 }
 
-/* Sidebar bên trái */
+/* -------- SIDEBAR -------- */
+
 .sidebar {
   width: 260px;
-  background-color: #f5f5f5;
+  background-color: #f3f4f6; /* xám nhạt như bản cũ */
   border-right: 1px solid #e5e7eb;
-  padding: 24px 16px 24px 24px;
+  display: flex;
+  flex-direction: column;
 }
 
-/* Nội dung bên phải */
-.main-content {
-  flex: 1;
-  padding: 32px 64px 48px 32px;
-}
-
-/* ----- Sidebar chi tiết ----- */
-
-.sidebar-inner {
-  height: 100%;
-}
-
-.sidebar-logo {
+.sidebar-header {
+  padding: 24px 24px 16px;
   font-size: 22px;
   font-weight: 700;
-  color: #b91c1c; /* đỏ logo */
-  margin-bottom: 24px;
+  color: #b91c1c; /* đỏ tiêu đề ERP SELLER */
 }
 
-.sidebar-group {
-  margin-bottom: 20px;
+.sidebar-nav {
+  flex: 1;
+  padding-bottom: 24px;
+  overflow-y: auto;
 }
 
-.sidebar-group-title {
+.sidebar-section {
+  margin-top: 16px;
+}
+
+.sidebar-section-title {
+  padding: 8px 24px;
   font-size: 13px;
   font-weight: 600;
   text-transform: uppercase;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.04em;
   color: #6b7280;
-  margin-bottom: 6px;
 }
 
-/* Bỏ bullet, canh list sát 2 bên để item đỏ tràn full */
 .sidebar-list {
   list-style: none;
   margin: 0;
   padding: 0;
 }
 
-/* Reset style button trong menu */
+/* Nút menu: full chiều ngang, không bo góc, không dư khoảng trắng */
 .sidebar-item {
-  display: block;
   width: 100%;
-  margin: 2px -16px;       /* kéo ra 2 bên để nền đỏ chạm sát viền sidebar */
-  padding: 10px 24px;
-  text-align: left;
   border: none;
-  border-radius: 0;
   background: transparent;
-  font: inherit;
-  color: #111827;
   cursor: pointer;
+  text-align: left;
+  padding: 10px 24px;
+  font-size: 15px;
+  color: #111827;
+  display: block;
 }
 
-/* Hover: đỏ nhạt, full chiều ngang */
+/* Hover: đỏ nhạt nhưng vẫn tràn full */
 .sidebar-item:hover {
-  background-color: #fecaca; /* đỏ rất nhạt */
-  color: #b91c1c;
+  background-color: #fee2e2;
 }
 
-/* Active: đỏ đậm, chữ trắng, full chiều ngang */
-.sidebar-item.active {
-  background-color: #ef4444; /* đỏ đậm */
+/* Đang chọn: đỏ đậm, chữ trắng, tràn từ trái sang phải đúng yêu cầu */
+.sidebar-item-active {
+  background-color: #ef4444;
   color: #ffffff;
 }
 
-/* Giữ focus đẹp khi tab bằng keyboard (không bắt buộc) */
-.sidebar-item:focus-visible {
-  outline: 2px solid #ef4444;
-  outline-offset: 2px;
+.sidebar-item-active:hover {
+  background-color: #ef4444;
 }
 
-/* ----- Một chút style text nội dung ----- */
+/* -------- MAIN CONTENT -------- */
 
-h1,
-h2,
-h3 {
+.app-main {
+  flex: 1;
+  padding: 32px 64px;
+}
+
+/* Đảm bảo tiêu đề và nội dung bên phải không bị tụt xuống, giữ khung đẹp */
+.app-main h1,
+.app-main h2,
+.app-main h3 {
   margin-top: 0;
 }
 
-main p {
-  line-height: 1.5;
+/* (Tuỳ chọn) Anh muốn đường kẻ nhẹ phía trên khu nội dung giống “khung” */
+.app-main {
+  border-top: 0;
 }
