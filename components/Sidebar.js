@@ -1,14 +1,15 @@
+// components/Sidebar.js
 "use client";
 
 import { useState } from "react";
 
-const MENU = [
+const menuGroups = [
   {
-    group: "Tổng quan",
+    title: "Tổng quan",
     items: ["Dashboard"],
   },
   {
-    group: "Cấu hình shop",
+    title: "Cấu hình shop",
     items: [
       "Cửa hàng & Thương hiệu",
       "Sản phẩm / Dịch vụ",
@@ -17,7 +18,7 @@ const MENU = [
     ],
   },
   {
-    group: "Nội dung & AI",
+    title: "Nội dung & AI",
     items: [
       "Nội dung AI",
       "Tin nhắn CSKH",
@@ -26,40 +27,44 @@ const MENU = [
     ],
   },
   {
-    group: "Thiết kế",
+    title: "Thiết kế",
     items: ["Mẫu thiết kế"],
   },
   {
-    group: "Hệ thống",
+    title: "Hệ thống",
     items: ["Gói dịch vụ"],
   },
 ];
 
 export default function Sidebar() {
-  // Mặc định đang chọn "Cửa hàng & Thương hiệu"
-  const [active, setActive] = useState("Cửa hàng & Thương hiệu");
+  // Mặc định chọn "Cửa hàng & Thương hiệu" giống hình anh gửi
+  const [activeItem, setActiveItem] = useState("Cửa hàng & Thương hiệu");
 
   return (
-    <div className="sidebar">
-      <h2 className="sidebar-title">ERP SELLER</h2>
+    <div className="sidebar-inner">
+      <div className="sidebar-logo">ERP SELLER</div>
 
-      {MENU.map((group) => (
-        <div key={group.group}>
-          <div className="sidebar-group-title">{group.group}</div>
+      {menuGroups.map((group) => (
+        <div key={group.title} className="sidebar-group">
+          <div className="sidebar-group-title">{group.title}</div>
 
-          {group.items.map((item) => (
-            <button
-              key={item}
-              type="button"
-              onClick={() => setActive(item)}
-              className={
-                "sidebar-item" +
-                (active === item ? " sidebar-item-active" : "")
-              }
-            >
-              {item}
-            </button>
-          ))}
+          <ul className="sidebar-list">
+            {group.items.map((item) => {
+              const isActive = item === activeItem;
+
+              return (
+                <li key={item}>
+                  <button
+                    type="button"
+                    className={`sidebar-item ${isActive ? "active" : ""}`}
+                    onClick={() => setActiveItem(item)}
+                  >
+                    {item}
+                  </button>
+                </li>
+              );
+            })}
+          </ul>
         </div>
       ))}
     </div>
