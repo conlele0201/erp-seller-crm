@@ -3,13 +3,13 @@
 
 import { useState } from "react";
 
-const menuGroups = [
+const MENU = [
   {
-    title: "Tổng quan",
+    group: "Tổng quan",
     items: ["Dashboard"],
   },
   {
-    title: "Cấu hình shop",
+    group: "Cấu hình shop",
     items: [
       "Cửa hàng & Thương hiệu",
       "Sản phẩm / Dịch vụ",
@@ -18,7 +18,7 @@ const menuGroups = [
     ],
   },
   {
-    title: "Nội dung & AI",
+    group: "Nội dung & AI",
     items: [
       "Nội dung AI",
       "Tin nhắn CSKH",
@@ -27,46 +27,49 @@ const menuGroups = [
     ],
   },
   {
-    title: "Thiết kế",
+    group: "Thiết kế",
     items: ["Mẫu thiết kế"],
   },
   {
-    title: "Hệ thống",
+    group: "Hệ thống",
     items: ["Gói dịch vụ"],
   },
 ];
 
 export default function Sidebar() {
-  // Mặc định chọn "Cửa hàng & Thương hiệu" giống hình anh gửi
-  const [activeItem, setActiveItem] = useState("Cửa hàng & Thương hiệu");
+  const [activeItem, setActiveItem] = useState("Dashboard");
 
   return (
-    <div className="sidebar-inner">
-      <div className="sidebar-logo">ERP SELLER</div>
+    <aside className="sidebar">
+      <div className="sidebar-header">ERP SELLER</div>
 
-      {menuGroups.map((group) => (
-        <div key={group.title} className="sidebar-group">
-          <div className="sidebar-group-title">{group.title}</div>
+      <nav className="sidebar-nav">
+        {MENU.map((section) => (
+          <div key={section.group} className="sidebar-section">
+            <div className="sidebar-section-title">{section.group}</div>
+            <ul className="sidebar-list">
+              {section.items.map((item) => {
+                const isActive = activeItem === item;
 
-          <ul className="sidebar-list">
-            {group.items.map((item) => {
-              const isActive = item === activeItem;
-
-              return (
-                <li key={item}>
-                  <button
-                    type="button"
-                    className={`sidebar-item ${isActive ? "active" : ""}`}
-                    onClick={() => setActiveItem(item)}
-                  >
-                    {item}
-                  </button>
-                </li>
-              );
-            })}
-          </ul>
-        </div>
-      ))}
-    </div>
+                return (
+                  <li key={item}>
+                    <button
+                      type="button"
+                      className={
+                        "sidebar-item" +
+                        (isActive ? " sidebar-item-active" : "")
+                      }
+                      onClick={() => setActiveItem(item)}
+                    >
+                      {item}
+                    </button>
+                  </li>
+                );
+              })}
+            </ul>
+          </div>
+        ))}
+      </nav>
+    </aside>
   );
 }
