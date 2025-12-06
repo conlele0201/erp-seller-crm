@@ -1,64 +1,120 @@
-/* Reset */
-* {
-  margin: 0;
-  padding: 0;
+/* app/globals.css */
+
+/* ----- Reset đơn giản ----- */
+*,
+*::before,
+*::after {
   box-sizing: border-box;
 }
 
-html, body {
-  font-family: system-ui, Arial, sans-serif;
-  background: #ffffff;
-  color: #111;
+html,
+body {
+  margin: 0;
+  padding: 0;
+  min-height: 100%;
 }
 
-/* Layout */
+body {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+    sans-serif;
+  color: #111827;
+  background-color: #ffffff;
+}
+
+/* ----- Layout tổng ----- */
+.app-shell {
+  display: flex;
+  min-height: 100vh;
+}
+
+/* Sidebar bên trái */
 .sidebar {
   width: 260px;
-  background: #f4f4f4;
-  border-right: 1px solid #ddd;
-  height: 100vh;
-  padding: 28px 20px;
-  overflow-y: auto;
+  background-color: #f5f5f5;
+  border-right: 1px solid #e5e7eb;
+  padding: 24px 16px 24px 24px;
 }
 
-.sidebar-title {
-  font-size: 24px;
+/* Nội dung bên phải */
+.main-content {
+  flex: 1;
+  padding: 32px 64px 48px 32px;
+}
+
+/* ----- Sidebar chi tiết ----- */
+
+.sidebar-inner {
+  height: 100%;
+}
+
+.sidebar-logo {
+  font-size: 22px;
   font-weight: 700;
+  color: #b91c1c; /* đỏ logo */
+  margin-bottom: 24px;
+}
+
+.sidebar-group {
   margin-bottom: 20px;
 }
 
-.sidebar-section {
-  margin-top: 22px;
-  font-size: 14px;
+.sidebar-group-title {
+  font-size: 13px;
   font-weight: 600;
-  color: #555;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #6b7280;
+  margin-bottom: 6px;
 }
 
-.menu-item {
-  font-size: 15px;
-  padding: 10px 14px;
-  margin-top: 6px;
-  border-radius: 6px;
-  cursor: pointer;
-  transition: 0.15s ease;
+/* Bỏ bullet, canh list sát 2 bên để item đỏ tràn full */
+.sidebar-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
 }
 
-/* Hover */
-.menu-item:hover {
-  background: #ff6961;
-  color: white;
-}
-
-/* Active item */
-.menu-item.active {
-  background: #ff3b30; /* đỏ đậm */
-  color: white;
-  font-weight: 600;
+/* Reset style button trong menu */
+.sidebar-item {
+  display: block;
   width: 100%;
+  margin: 2px -16px;       /* kéo ra 2 bên để nền đỏ chạm sát viền sidebar */
+  padding: 10px 24px;
+  text-align: left;
+  border: none;
+  border-radius: 0;
+  background: transparent;
+  font: inherit;
+  color: #111827;
+  cursor: pointer;
 }
 
-/* Đảm bảo main không bị nhảy xuống */
-main {
-  flex: 1;
-  padding: 40px;
+/* Hover: đỏ nhạt, full chiều ngang */
+.sidebar-item:hover {
+  background-color: #fecaca; /* đỏ rất nhạt */
+  color: #b91c1c;
+}
+
+/* Active: đỏ đậm, chữ trắng, full chiều ngang */
+.sidebar-item.active {
+  background-color: #ef4444; /* đỏ đậm */
+  color: #ffffff;
+}
+
+/* Giữ focus đẹp khi tab bằng keyboard (không bắt buộc) */
+.sidebar-item:focus-visible {
+  outline: 2px solid #ef4444;
+  outline-offset: 2px;
+}
+
+/* ----- Một chút style text nội dung ----- */
+
+h1,
+h2,
+h3 {
+  margin-top: 0;
+}
+
+main p {
+  line-height: 1.5;
 }
