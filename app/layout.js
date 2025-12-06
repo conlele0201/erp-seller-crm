@@ -11,23 +11,12 @@ export default function RootLayout({ children }) {
   return (
     <html lang="vi">
       <body>
-        {/* Bố cục 2 cột: Sidebar bên trái, nội dung bên phải */}
-        <div
-          style={{
-            display: "flex",
-            minHeight: "100vh",
-          }}
-        >
-          {/* Menu bên trái */}
-          <Sidebar />
+        <div className="app-shell">
+          <aside className="sidebar">
+            <Sidebar />
+          </aside>
 
-          {/* Nội dung bên phải */}
-          <main
-            style={{
-              flex: 1,
-              padding: "32px 48px",
-            }}
-          >
+          <main className="main-content">
             {children}
           </main>
         </div>
