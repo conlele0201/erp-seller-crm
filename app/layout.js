@@ -12,11 +12,8 @@ export default function RootLayout({ children }) {
     <html lang="vi">
       <body>
         <div className="app-shell">
-          <aside className="sidebar">
-            <Sidebar />
-          </aside>
-
-          <main className="main-content">
+          <Sidebar />
+          <main className="app-main">
             {children}
           </main>
         </div>
