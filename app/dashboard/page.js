@@ -1,7 +1,5 @@
-// app/dashboard/page.js
-
 export default function DashboardPage() {
-  // mock data KPI
+  // KPI mock data
   const kpis = [
     {
       title: "Doanh thu hôm nay",
@@ -29,7 +27,7 @@ export default function DashboardPage() {
     },
   ];
 
-  // mock top sản phẩm
+  // Top sản phẩm mock
   const topProducts = [
     { name: "Áo thun nam", sold: 54, revenue: "6,480,000₫" },
     { name: "Váy body nữ", sold: 32, revenue: "5,120,000₫" },
@@ -38,11 +36,23 @@ export default function DashboardPage() {
 
   return (
     <div style={{ padding: "24px" }}>
-      {/* Header */}
-      <h1 style={{ fontSize: "30px", fontWeight: "700", marginBottom: "8px" }}>
+      {/* HEADER */}
+      <h1
+        style={{
+          fontSize: "30px",
+          fontWeight: "700",
+          marginBottom: "8px",
+        }}
+      >
         Dashboard
       </h1>
-      <p style={{ fontSize: "16px", color: "#555", marginBottom: "28px" }}>
+      <p
+        style={{
+          fontSize: "16px",
+          color: "#555",
+          marginBottom: "28px",
+        }}
+      >
         Tổng quan hoạt động hôm nay của shop
       </p>
 
@@ -59,7 +69,7 @@ export default function DashboardPage() {
           <div
             key={index}
             style={{
-              background: "#fff",
+              background: "#ffffff",
               borderRadius: "12px",
               padding: "20px",
               boxShadow: "0 2px 8px rgba(0,0,0,0.08)",
@@ -67,13 +77,19 @@ export default function DashboardPage() {
           >
             <div style={{ fontSize: "28px" }}>{item.icon}</div>
 
-            <p style={{ fontSize: "14px", color: "#666", marginTop: "10px" }}>
+            <p
+              style={{
+                fontSize: "14px",
+                color: "#666",
+                marginTop: "10px",
+              }}
+            >
               {item.title}
             </p>
 
             <p
               style={{
-                fontSize: "26px",
+                fontSize: "24px",
                 fontWeight: "700",
                 margin: "4px 0 6px",
               }}
@@ -84,7 +100,7 @@ export default function DashboardPage() {
             <p
               style={{
                 fontSize: "14px",
-                color: item.change.includes("+") ? "green" : "red",
+                color: item.change.indexOf("+") !== -1 ? "green" : "red",
               }}
             >
               {item.change} so với hôm qua
@@ -93,7 +109,7 @@ export default function DashboardPage() {
         ))}
       </div>
 
-      {/* BIỂU ĐỒ FAKE BLOCK */}
+      {/* BIỂU ĐỒ (PLACEHOLDER) */}
       <div
         style={{
           display: "grid",
@@ -104,7 +120,7 @@ export default function DashboardPage() {
       >
         <div
           style={{
-            background: "#fff",
+            background: "#ffffff",
             borderRadius: "12px",
             height: "280px",
             padding: "20px",
@@ -119,12 +135,12 @@ export default function DashboardPage() {
               borderRadius: "10px",
               marginTop: "12px",
             }}
-          ></div>
+          />
         </div>
 
         <div
           style={{
-            background: "#fff",
+            background: "#ffffff",
             borderRadius: "12px",
             height: "280px",
             padding: "20px",
@@ -139,14 +155,14 @@ export default function DashboardPage() {
               borderRadius: "10px",
               marginTop: "12px",
             }}
-          ></div>
+          />
         </div>
       </div>
 
       {/* TOP SẢN PHẨM */}
       <div
         style={{
-          background: "#fff",
+          background: "#ffffff",
           padding: "20px",
           borderRadius: "12px",
           boxShadow: "0 2px 8px rgba(0,0,0,0.08)",
@@ -155,15 +171,20 @@ export default function DashboardPage() {
       >
         <h3 style={{ marginBottom: "12px" }}>Sản phẩm bán chạy</h3>
 
-        <table style={{ width: "100%", borderCollapse: "collapse" }}>
+        <table
+          style={{
+            width: "100%",
+            borderCollapse: "collapse",
+            fontSize: "14px",
+          }}
+        >
           <thead>
-            <tr style={{ textAlign: "left", color: "#666", fontSize: "14px" }}>
+            <tr style={{ textAlign: "left", color: "#666" }}>
               <th style={{ padding: "8px 0" }}>Tên sản phẩm</th>
               <th>Số lượng</th>
               <th>Doanh thu</th>
             </tr>
           </thead>
-
           <tbody>
             {topProducts.map((p, i) => (
               <tr key={i} style={{ borderTop: "1px solid #eee" }}>
@@ -176,10 +197,10 @@ export default function DashboardPage() {
         </table>
       </div>
 
-      {/* CARD GỢI Ý AI */}
+      {/* GỢI Ý TỪ AI */}
       <div
         style={{
-          background: "#fff",
+          background: "#ffffff",
           padding: "20px",
           borderRadius: "12px",
           boxShadow: "0 2px 8px rgba(0,0,0,0.08)",
@@ -187,11 +208,10 @@ export default function DashboardPage() {
         }}
       >
         <h3 style={{ marginBottom: "12px" }}>Gợi ý từ AI</h3>
-
-        <ul style={{ paddingLeft: "20px", lineHeight: "1.6" }}>
-          <li>Nên livestream lúc 19:00 → khả năng chốt cao.</li>
-          <li>Áo thun nam đang tăng → đẩy quảng cáo.</li>
-          <li>Phản hồi khách < 2 phút → duy trì tốt.</li>
+        <ul style={{ paddingLeft: "20px", lineHeight: 1.6 }}>
+          <li>Nên livestream lúc 19:00 để tăng tỉ lệ chốt đơn.</li>
+          <li>Áo thun nam đang có xu hướng tăng, nên đẩy quảng cáo.</li>
+          <li>Thời gian phản hồi khách &lt; 2 phút đang rất tốt, cần duy trì.</li>
         </ul>
       </div>
     </div>
