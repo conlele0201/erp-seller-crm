@@ -51,12 +51,10 @@ export default function ProductsPage() {
     },
   ];
 
-  // 👉 FIX DUY NHẤT: canh sát sidebar, không đẩy ra xa
+  // ====== FIX QUAN TRỌNG: GIẢM PADDING TRÁI ĐỂ SÁT MENU ======
   const pageStyle = {
-    padding: "32px 64px",
-    paddingLeft: "24px", // sát sidebar nhưng vẫn đẹp như Dashboard
-    fontFamily:
-      "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+    padding: "32px 24px",   // <-- FIX tại đây
+    fontFamily: "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
   };
 
   const headerStyle = { marginBottom: 24 };
@@ -124,8 +122,16 @@ export default function ProductsPage() {
     boxShadow: "0 4px 12px rgba(15,23,42,0.02)",
   };
 
-  const filtersRowStyle = { display: "flex", flexWrap: "wrap", gap: 12 };
-  const filterItemStyle = { flex: "1 1 200px", minWidth: 200 };
+  const filtersRowStyle = {
+    display: "flex",
+    flexWrap: "wrap",
+    gap: 12,
+  };
+
+  const filterItemStyle = {
+    flex: "1 1 200px",
+    minWidth: 200,
+  };
 
   const inputStyle = {
     width: "100%",
@@ -145,12 +151,7 @@ export default function ProductsPage() {
   };
 
   const tableWrapperStyle = { width: "100%", overflowX: "auto" };
-
-  const tableStyle = {
-    width: "100%",
-    borderCollapse: "collapse",
-    fontSize: 14,
-  };
+  const tableStyle = { width: "100%", borderCollapse: "collapse", fontSize: 14 };
 
   const thStyle = {
     textAlign: "left",
@@ -169,8 +170,8 @@ export default function ProductsPage() {
   };
 
   const statusBadge = (status) => {
-    let bg = "#dcfce7",
-      color = "#166534";
+    let bg = "#dcfce7";
+    let color = "#166534";
 
     if (status === "Sắp hết hàng") {
       bg = "#fef3c7";
@@ -204,15 +205,13 @@ export default function ProductsPage() {
     <div style={pageStyle}>
       <header style={headerStyle}>
         <h1 style={titleStyle}>Sản phẩm / Dịch vụ</h1>
-        <p style={subtitleStyle}>
-          Quản lý toàn bộ sản phẩm đang bán trên các kênh.
-        </p>
+        <p style={subtitleStyle}>Quản lý toàn bộ sản phẩm đang bán trên các kênh.</p>
       </header>
 
       <div style={toolbarStyle}>
         <div style={{ display: "flex", gap: 8 }}>
-          <button style={btnSecondary}>Xuất file</button>
-          <button style={btnPrimary}>+ Thêm sản phẩm</button>
+          <button type="button" style={btnSecondary}>Xuất file</button>
+          <button type="button" style={btnPrimary}>+ Thêm sản phẩm</button>
         </div>
         <div style={{ fontSize: 13, color: "#6b7280" }}>
           Tổng cộng <strong>120</strong> sản phẩm đang quản lý
@@ -236,17 +235,27 @@ export default function ProductsPage() {
           </div>
           <div style={filterItemStyle}>
             <select style={inputStyle}>
-              <option>Tất cả danh mục</option>
+              <option value="">Tất cả danh mục</option>
+              <option value="nam">Thời trang nam</option>
+              <option value="nu">Thời trang nữ</option>
+              <option value="my-pham">Mỹ phẩm</option>
             </select>
           </div>
           <div style={filterItemStyle}>
             <select style={inputStyle}>
-              <option>Tất cả trạng thái</option>
+              <option value="">Tất cả trạng thái</option>
+              <option value="active">Đang bán</option>
+              <option value="low">Sắp hết hàng</option>
+              <option value="out">Hết hàng</option>
+              <option value="hidden">Đang ẩn</option>
             </select>
           </div>
           <div style={filterItemStyle}>
             <select style={inputStyle}>
-              <option>Tất cả kênh bán</option>
+              <option value="">Tất cả kênh bán</option>
+              <option value="tiktok">TikTok Shop</option>
+              <option value="shopee">Shopee</option>
+              <option value="website">Website</option>
             </select>
           </div>
         </div>
@@ -268,6 +277,7 @@ export default function ProductsPage() {
                 <th style={thStyle}>Thao tác</th>
               </tr>
             </thead>
+
             <tbody>
               {products.map((p) => (
                 <tr key={p.sku}>
@@ -282,12 +292,38 @@ export default function ProductsPage() {
                   <td style={tdStyle}>{p.channel}</td>
                   <td style={tdStyle}>{p.updatedAt}</td>
                   <td style={tdStyle}>
-                    <button style={actionBtnStyle}>Sửa</button>
+                    <button type="button" style={actionBtnStyle}>Sửa</button>
                   </td>
                 </tr>
               ))}
             </tbody>
+
           </table>
+        </div>
+
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            padding: "12px 16px",
+            fontSize: 13,
+            color: "#6b7280",
+          }}
+        >
+          <span>Hiển thị 1–4 trên 120 sản phẩm</span>
+          <div style={{ display: "flex", gap: 4 }}>
+            <button type="button" style={actionBtnStyle}>&lt;</button>
+            <button
+              type="button"
+              style={{ ...actionBtnStyle, backgroundColor: "#ef4444", color: "#fff", borderColor: "#ef4444" }}
+            >
+              1
+            </button>
+            <button type="button" style={actionBtnStyle}>2</button>
+            <button type="button" style={actionBtnStyle}>3</button>
+            <button type="button" style={actionBtnStyle}>&gt;</button>
+          </div>
         </div>
       </section>
     </div>
