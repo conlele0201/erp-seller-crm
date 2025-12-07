@@ -1,70 +1,40 @@
-// app/products/page.js
 "use client";
-import { useState, useMemo } from "react";
+
+import { useEffect, useState, useMemo } from "react";
+import { createClient } from "@supabase/supabase-js";
+
+// ====================== SUPABASE CLIENT ======================
+const supabase = createClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL,
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+);
 
 export default function ProductsPage() {
-  // ====================== MOCK DATA ======================
-  const stats = [
-    { label: "Tổng số sản phẩm", value: "120", sub: "+5 so với hôm qua" },
-    { label: "Đang bán", value: "98", sub: "+3 sản phẩm mới" },
-    { label: "Sắp hết hàng (≤ 10)", value: "7", sub: "Cần nhập thêm" },
-    { label: "Đang ẩn trên kênh bán", value: "15", sub: "Chưa lên kênh" },
-  ];
-
-  const productData = [
-    {
-      name: "Áo thun nam basic",
-      sku: "ATN-001",
-      category: "Thời trang nam",
-      price: "199.000đ",
-      stock: 23,
-      status: "Đang bán",
-      channel: "Shopee, TikTok",
-      updatedAt: "Hôm nay, 10:21",
-    },
-    {
-      name: "Váy body nữ dạ hội",
-      sku: "VBN-014",
-      category: "Thời trang nữ",
-      price: "459.000đ",
-      stock: 8,
-      status: "Sắp hết hàng",
-      channel: "Shopee",
-      updatedAt: "Hôm qua, 21:03",
-    },
-    {
-      name: "Combo chăm sóc da 7 ngày",
-      sku: "CSD-007",
-      category: "Mỹ phẩm",
-      price: "379.000đ",
-      stock: 0,
-      status: "Hết hàng",
-      channel: "Website",
-      updatedAt: "02/12/2025",
-    },
-    {
-      name: "Serum phục hồi da",
-      sku: "SER-022",
-      category: "Mỹ phẩm",
-      price: "289.000đ",
-      stock: 41,
-      status: "Đang bán",
-      channel: "TikTok",
-      updatedAt: "Hôm nay, 08:45",
-    },
-  ];
-
   // ====================== STATES ======================
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
+
   const [search, setSearch] = useState("");
   const [category, setCategory] = useState("");
   const [status, setStatus] = useState("");
   const [channel, setChannel] = useState("");
 
-  const [showModal, setShowModal] = useState(false); // <-- MODAL STATE
+  // ====================== FETCH DATA ======================
+  useEffect(() => {
+    async function loadData() {
+      const { data, error } = await supabase.from("products").select("*");
+
+      if (!error && data) {
+        setProducts(data);
+      }
+      setLoading(false);
+    }
+    loadData();
+  }, []);
 
   // ====================== FILTER LOGIC ======================
   const filteredProducts = useMemo(() => {
-    return productData.filter((p) => {
+    return products.filter((p) => {
       const matchSearch =
         p.name.toLowerCase().includes(search.toLowerCase()) ||
         p.sku.toLowerCase().includes(search.toLowerCase());
@@ -72,14 +42,14 @@ export default function ProductsPage() {
       const matchCategory = category ? p.category === category : true;
       const matchStatus = status ? p.status === status : true;
       const matchChannel = channel
-        ? p.channel.toLowerCase().includes(channel.toLowerCase())
+        ? (p.channel || "").toLowerCase().includes(channel.toLowerCase())
         : true;
 
       return matchSearch && matchCategory && matchStatus && matchChannel;
     });
-  }, [search, category, status, channel]);
+  }, [products, search, category, status, channel]);
 
-  // ====================== STYLES (GIỮ NGUYÊN 100%) ======================
+  // ====================== UI STYLES ======================
   const pageStyle = { padding: "32px 40px", fontFamily: "system-ui" };
   const headerStyle = { marginBottom: 24 };
   const titleStyle = { fontSize: 32, fontWeight: 700, marginBottom: 8 };
@@ -197,7 +167,11 @@ export default function ProductsPage() {
     cursor: "pointer",
   };
 
-  // ====================== UI RENDER ======================
+  // ====================== UI ======================
+  if (loading) {
+    return <div style={{ padding: 40 }}>Đang tải dữ liệu…</div>;
+  }
+
   return (
     <div style={pageStyle}>
       <header style={headerStyle}>
@@ -208,32 +182,21 @@ export default function ProductsPage() {
       {/* Toolbar */}
       <div style={toolbarStyle}>
         <div style={{ display: "flex", gap: 8 }}>
-          <button type="button" style={btnSecondary}>Xuất file</button>
-
-          {/* NÚT MỞ MODAL */}
-          <button
-            type="button"
-            style={btnPrimary}
-            onClick={() => setShowModal(true)}
-          >
-            + Thêm sản phẩm
-          </button>
+          <button style={btnSecondary}>Xuất file</button>
+          <button style={btnPrimary}>+ Thêm sản phẩm</button>
         </div>
-
         <div style={{ fontSize: 13, color: "#6b7280" }}>
-          Tổng cộng <strong>120</strong> sản phẩm đang quản lý
+          Tổng cộng <strong>{products.length}</strong> sản phẩm
         </div>
       </div>
 
-      {/* Stats */}
+      {/* Stats (demo static) */}
       <section style={statsGridStyle}>
-        {stats.map((s) => (
-          <div key={s.label} style={statCardStyle}>
-            <div style={statLabelStyle}>{s.label}</div>
-            <div style={statValueStyle}>{s.value}</div>
-            <div style={statSubStyle}>{s.sub}</div>
-          </div>
-        ))}
+        <div style={statCardStyle}>
+          <div style={statLabelStyle}>Tổng số sản phẩm</div>
+          <div style={statValueStyle}>{products.length}</div>
+          <div style={statSubStyle}>+0 so với hôm qua</div>
+        </div>
       </section>
 
       {/* Filters */}
@@ -260,32 +223,6 @@ export default function ProductsPage() {
               <option value="Mỹ phẩm">Mỹ phẩm</option>
             </select>
           </div>
-
-          <div style={filterItemStyle}>
-            <select
-              style={inputStyle}
-              value={status}
-              onChange={(e) => setStatus(e.target.value)}
-            >
-              <option value="">Tất cả trạng thái</option>
-              <option value="Đang bán">Đang bán</option>
-              <option value="Sắp hết hàng">Sắp hết hàng</option>
-              <option value="Hết hàng">Hết hàng</option>
-            </select>
-          </div>
-
-          <div style={filterItemStyle}>
-            <select
-              style={inputStyle}
-              value={channel}
-              onChange={(e) => setChannel(e.target.value)}
-            >
-              <option value="">Tất cả kênh bán</option>
-              <option value="Shopee">Shopee</option>
-              <option value="TikTok">TikTok</option>
-              <option value="Website">Website</option>
-            </select>
-          </div>
         </div>
       </section>
 
@@ -298,7 +235,7 @@ export default function ProductsPage() {
                 <th style={thStyle}>Tên sản phẩm</th>
                 <th style={thStyle}>SKU</th>
                 <th style={thStyle}>Danh mục</th>
-                <th style={thStyle}>Giá bán</th>
+                <th style={thStyle}>Giá</th>
                 <th style={thStyle}>Tồn kho</th>
                 <th style={thStyle}>Trạng thái</th>
                 <th style={thStyle}>Kênh bán</th>
@@ -309,19 +246,21 @@ export default function ProductsPage() {
 
             <tbody>
               {filteredProducts.map((p) => (
-                <tr key={p.sku}>
+                <tr key={p.id}>
                   <td style={tdStyle}>{p.name}</td>
                   <td style={tdStyle}>{p.sku}</td>
                   <td style={tdStyle}>{p.category}</td>
-                  <td style={tdStyle}>{p.price}</td>
-                  <td style={tdStyle}>{p.stock}</td>
+                  <td style={tdStyle}>{p.price || "-"}</td>
+                  <td style={tdStyle}>{p.stock || 0}</td>
                   <td style={tdStyle}>
-                    <span style={statusBadge(p.status)}>{p.status}</span>
+                    <span style={statusBadge(p.status || "")}>
+                      {p.status || "—"}
+                    </span>
                   </td>
-                  <td style={tdStyle}>{p.channel}</td>
-                  <td style={tdStyle}>{p.updatedAt}</td>
+                  <td style={tdStyle}>{p.channel || "—"}</td>
+                  <td style={tdStyle}>{p.updated_at?.slice(0, 10) || "—"}</td>
                   <td style={tdStyle}>
-                    <button type="button" style={actionBtnStyle}>Sửa</button>
+                    <button style={actionBtnStyle}>Sửa</button>
                   </td>
                 </tr>
               ))}
@@ -329,73 +268,6 @@ export default function ProductsPage() {
           </table>
         </div>
       </section>
-
-
-      {/* ====================== MODAL ADD PRODUCT ====================== */}
-      {showModal && (
-        <div
-          style={{
-            position: "fixed",
-            inset: 0,
-            background: "rgba(0,0,0,0.35)",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            zIndex: 9999,
-          }}
-          onClick={() => setShowModal(false)}
-        >
-          <div
-            style={{
-              width: 420,
-              background: "#fff",
-              borderRadius: 12,
-              padding: 24,
-              boxShadow: "0 10px 30px rgba(0,0,0,0.15)",
-            }}
-            onClick={(e) => e.stopPropagation()}
-          >
-            <h3 style={{ margin: 0, marginBottom: 16, fontSize: 20, fontWeight: 700 }}>
-              Thêm sản phẩm
-            </h3>
-
-            <input placeholder="Tên sản phẩm" style={{ ...inputStyle, marginBottom: 12 }} />
-            <input placeholder="SKU" style={{ ...inputStyle, marginBottom: 12 }} />
-            <input placeholder="Giá" style={{ ...inputStyle, marginBottom: 12 }} />
-
-            <button
-              style={{
-                width: "100%",
-                padding: "10px 0",
-                borderRadius: 8,
-                background: "#ef4444",
-                color: "#fff",
-                border: "none",
-                fontWeight: 600,
-                cursor: "pointer",
-                marginTop: 8,
-              }}
-            >
-              Lưu sản phẩm
-            </button>
-
-            <button
-              style={{
-                width: "100%",
-                padding: "10px 0",
-                borderRadius: 8,
-                background: "#e5e7eb",
-                border: "none",
-                marginTop: 8,
-                cursor: "pointer",
-              }}
-              onClick={() => setShowModal(false)}
-            >
-              Đóng
-            </button>
-          </div>
-        </div>
-      )}
     </div>
   );
 }
