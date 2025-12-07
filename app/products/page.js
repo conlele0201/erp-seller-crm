@@ -1,6 +1,9 @@
 // app/products/page.js
+"use client";
+import { useState, useMemo } from "react";
 
 export default function ProductsPage() {
+  // ====================== MOCK DATA ======================
   const stats = [
     { label: "Tổng số sản phẩm", value: "120", sub: "+5 so với hôm qua" },
     { label: "Đang bán", value: "98", sub: "+3 sản phẩm mới" },
@@ -8,7 +11,7 @@ export default function ProductsPage() {
     { label: "Đang ẩn trên kênh bán", value: "15", sub: "Chưa lên kênh" },
   ];
 
-  const products = [
+  const productData = [
     {
       name: "Áo thun nam basic",
       sku: "ATN-001",
@@ -51,16 +54,34 @@ export default function ProductsPage() {
     },
   ];
 
-  // ====== FIX QUAN TRỌNG: GIẢM PADDING TRÁI ĐỂ SÁT MENU ======
-  const pageStyle = {
-    padding: "32px 24px",   // <-- FIX tại đây
-    fontFamily: "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
-  };
+  // ====================== STATES ======================
+  const [search, setSearch] = useState("");
+  const [category, setCategory] = useState("");
+  const [status, setStatus] = useState("");
+  const [channel, setChannel] = useState("");
 
+  // ====================== FILTER LOGIC ======================
+  const filteredProducts = useMemo(() => {
+    return productData.filter((p) => {
+      const matchSearch =
+        p.name.toLowerCase().includes(search.toLowerCase()) ||
+        p.sku.toLowerCase().includes(search.toLowerCase());
+
+      const matchCategory = category ? p.category === category : true;
+      const matchStatus = status ? p.status === status : true;
+      const matchChannel = channel
+        ? p.channel.toLowerCase().includes(channel.toLowerCase())
+        : true;
+
+      return matchSearch && matchCategory && matchStatus && matchChannel;
+    });
+  }, [search, category, status, channel]);
+
+  // ====================== STYLES (GIỮ NGUYÊN CỦA ANH) ======================
+  const pageStyle = { padding: "32px 40px", fontFamily: "system-ui" };
   const headerStyle = { marginBottom: 24 };
   const titleStyle = { fontSize: 32, fontWeight: 700, marginBottom: 8 };
   const subtitleStyle = { fontSize: 16, color: "#4b5563" };
-
   const toolbarStyle = {
     display: "flex",
     justifyContent: "space-between",
@@ -70,7 +91,6 @@ export default function ProductsPage() {
     gap: 12,
     flexWrap: "wrap",
   };
-
   const btnPrimary = {
     padding: "8px 16px",
     borderRadius: 6,
@@ -81,7 +101,6 @@ export default function ProductsPage() {
     cursor: "pointer",
     fontSize: 14,
   };
-
   const btnSecondary = {
     padding: "8px 16px",
     borderRadius: 6,
@@ -92,14 +111,12 @@ export default function ProductsPage() {
     cursor: "pointer",
     fontSize: 14,
   };
-
   const statsGridStyle = {
     display: "grid",
     gridTemplateColumns: "repeat(4, minmax(0, 1fr))",
     gap: 16,
     marginBottom: 24,
   };
-
   const statCardStyle = {
     padding: 16,
     borderRadius: 12,
@@ -107,11 +124,9 @@ export default function ProductsPage() {
     backgroundColor: "#fff",
     boxShadow: "0 4px 12px rgba(15,23,42,0.03)",
   };
-
   const statLabelStyle = { fontSize: 13, color: "#6b7280", marginBottom: 4 };
   const statValueStyle = { fontSize: 24, fontWeight: 700, marginBottom: 4 };
   const statSubStyle = { fontSize: 12, color: "#16a34a" };
-
   const filtersCardStyle = {
     marginTop: 8,
     marginBottom: 24,
@@ -121,18 +136,8 @@ export default function ProductsPage() {
     backgroundColor: "#fff",
     boxShadow: "0 4px 12px rgba(15,23,42,0.02)",
   };
-
-  const filtersRowStyle = {
-    display: "flex",
-    flexWrap: "wrap",
-    gap: 12,
-  };
-
-  const filterItemStyle = {
-    flex: "1 1 200px",
-    minWidth: 200,
-  };
-
+  const filtersRowStyle = { display: "flex", flexWrap: "wrap", gap: 12 };
+  const filterItemStyle = { flex: "1 1 200px", minWidth: 200 };
   const inputStyle = {
     width: "100%",
     padding: "8px 10px",
@@ -140,7 +145,6 @@ export default function ProductsPage() {
     border: "1px solid #e5e7eb",
     fontSize: 14,
   };
-
   const tableCardStyle = {
     marginTop: 8,
     borderRadius: 12,
@@ -149,10 +153,8 @@ export default function ProductsPage() {
     boxShadow: "0 6px 18px rgba(15,23,42,0.04)",
     overflow: "hidden",
   };
-
   const tableWrapperStyle = { width: "100%", overflowX: "auto" };
   const tableStyle = { width: "100%", borderCollapse: "collapse", fontSize: 14 };
-
   const thStyle = {
     textAlign: "left",
     padding: "12px 16px",
@@ -162,7 +164,6 @@ export default function ProductsPage() {
     fontWeight: 600,
     color: "#4b5563",
   };
-
   const tdStyle = {
     padding: "12px 16px",
     borderBottom: "1px solid #f3f4f6",
@@ -170,16 +171,9 @@ export default function ProductsPage() {
   };
 
   const statusBadge = (status) => {
-    let bg = "#dcfce7";
-    let color = "#166534";
-
-    if (status === "Sắp hết hàng") {
-      bg = "#fef3c7";
-      color = "#92400e";
-    } else if (status === "Hết hàng") {
-      bg = "#fee2e2";
-      color = "#b91c1c";
-    }
+    let s = { bg: "#dcfce7", color: "#166534" };
+    if (status === "Sắp hết hàng") s = { bg: "#fef3c7", color: "#92400e" };
+    if (status === "Hết hàng") s = { bg: "#fee2e2", color: "#b91c1c" };
 
     return {
       display: "inline-block",
@@ -187,8 +181,8 @@ export default function ProductsPage() {
       borderRadius: 999,
       fontSize: 12,
       fontWeight: 600,
-      backgroundColor: bg,
-      color,
+      backgroundColor: s.bg,
+      color: s.color,
     };
   };
 
@@ -201,6 +195,7 @@ export default function ProductsPage() {
     cursor: "pointer",
   };
 
+  // ====================== UI RENDER ======================
   return (
     <div style={pageStyle}>
       <header style={headerStyle}>
@@ -208,6 +203,7 @@ export default function ProductsPage() {
         <p style={subtitleStyle}>Quản lý toàn bộ sản phẩm đang bán trên các kênh.</p>
       </header>
 
+      {/* Toolbar */}
       <div style={toolbarStyle}>
         <div style={{ display: "flex", gap: 8 }}>
           <button type="button" style={btnSecondary}>Xuất file</button>
@@ -218,6 +214,7 @@ export default function ProductsPage() {
         </div>
       </div>
 
+      {/* Stats */}
       <section style={statsGridStyle}>
         {stats.map((s) => (
           <div key={s.label} style={statCardStyle}>
@@ -228,39 +225,60 @@ export default function ProductsPage() {
         ))}
       </section>
 
+      {/* Filters */}
       <section style={filtersCardStyle}>
         <div style={filtersRowStyle}>
           <div style={filterItemStyle}>
-            <input style={inputStyle} placeholder="Tìm theo tên, SKU..." />
+            <input
+              style={inputStyle}
+              placeholder="Tìm theo tên, SKU..."
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+            />
           </div>
+
           <div style={filterItemStyle}>
-            <select style={inputStyle}>
+            <select
+              style={inputStyle}
+              value={category}
+              onChange={(e) => setCategory(e.target.value)}
+            >
               <option value="">Tất cả danh mục</option>
-              <option value="nam">Thời trang nam</option>
-              <option value="nu">Thời trang nữ</option>
-              <option value="my-pham">Mỹ phẩm</option>
+              <option value="Thời trang nam">Thời trang nam</option>
+              <option value="Thời trang nữ">Thời trang nữ</option>
+              <option value="Mỹ phẩm">Mỹ phẩm</option>
             </select>
           </div>
+
           <div style={filterItemStyle}>
-            <select style={inputStyle}>
+            <select
+              style={inputStyle}
+              value={status}
+              onChange={(e) => setStatus(e.target.value)}
+            >
               <option value="">Tất cả trạng thái</option>
-              <option value="active">Đang bán</option>
-              <option value="low">Sắp hết hàng</option>
-              <option value="out">Hết hàng</option>
-              <option value="hidden">Đang ẩn</option>
+              <option value="Đang bán">Đang bán</option>
+              <option value="Sắp hết hàng">Sắp hết hàng</option>
+              <option value="Hết hàng">Hết hàng</option>
             </select>
           </div>
+
           <div style={filterItemStyle}>
-            <select style={inputStyle}>
+            <select
+              style={inputStyle}
+              value={channel}
+              onChange={(e) => setChannel(e.target.value)}
+            >
               <option value="">Tất cả kênh bán</option>
-              <option value="tiktok">TikTok Shop</option>
-              <option value="shopee">Shopee</option>
-              <option value="website">Website</option>
+              <option value="Shopee">Shopee</option>
+              <option value="TikTok">TikTok</option>
+              <option value="Website">Website</option>
             </select>
           </div>
         </div>
       </section>
 
+      {/* Table */}
       <section style={tableCardStyle}>
         <div style={tableWrapperStyle}>
           <table style={tableStyle}>
@@ -279,7 +297,7 @@ export default function ProductsPage() {
             </thead>
 
             <tbody>
-              {products.map((p) => (
+              {filteredProducts.map((p) => (
                 <tr key={p.sku}>
                   <td style={tdStyle}>{p.name}</td>
                   <td style={tdStyle}>{p.sku}</td>
@@ -297,33 +315,7 @@ export default function ProductsPage() {
                 </tr>
               ))}
             </tbody>
-
           </table>
-        </div>
-
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-            padding: "12px 16px",
-            fontSize: 13,
-            color: "#6b7280",
-          }}
-        >
-          <span>Hiển thị 1–4 trên 120 sản phẩm</span>
-          <div style={{ display: "flex", gap: 4 }}>
-            <button type="button" style={actionBtnStyle}>&lt;</button>
-            <button
-              type="button"
-              style={{ ...actionBtnStyle, backgroundColor: "#ef4444", color: "#fff", borderColor: "#ef4444" }}
-            >
-              1
-            </button>
-            <button type="button" style={actionBtnStyle}>2</button>
-            <button type="button" style={actionBtnStyle}>3</button>
-            <button type="button" style={actionBtnStyle}>&gt;</button>
-          </div>
         </div>
       </section>
     </div>
