@@ -78,12 +78,12 @@ body {
   display: block;
 }
 
-/* Hover: đỏ nhạt nhưng vẫn tràn full */
+/* Hover */
 .sidebar-item:hover {
   background-color: #fee2e2;
 }
 
-/* Đang chọn: đỏ đậm, chữ trắng, tràn từ trái sang phải đúng yêu cầu */
+/* Active */
 .sidebar-item-active {
   background-color: #ef4444;
   color: #ffffff;
@@ -97,17 +97,18 @@ body {
 
 .app-main {
   flex: 1;
-  padding: 32px 64px;
+
+  /* 🔥 SỬA LỖI KHOẢNG TRẮNG LỚN BÊN TRÁI */
+  padding: 32px 24px;   /* trước đây là 32px 64px */
 }
 
-/* Đảm bảo tiêu đề và nội dung bên phải không bị tụt xuống, giữ khung đẹp */
+/* Giữ khung đẹp */
 .app-main h1,
 .app-main h2,
 .app-main h3 {
   margin-top: 0;
 }
 
-/* (Tuỳ chọn) Anh muốn đường kẻ nhẹ phía trên khu nội dung giống “khung” */
 .app-main {
   border-top: 0;
 }
