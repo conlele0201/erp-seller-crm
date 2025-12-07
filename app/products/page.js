@@ -1,9 +1,8 @@
 "use client";
-
-import { useEffect, useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { createClient } from "@supabase/supabase-js";
 
-// ====================== SUPABASE CLIENT ======================
+// ========= TẠO CLIENT SUPABASE =========
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL,
   process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
@@ -19,16 +18,18 @@ export default function ProductsPage() {
   const [status, setStatus] = useState("");
   const [channel, setChannel] = useState("");
 
-  // ====================== FETCH DATA ======================
+  // ====================== LOAD DATA FROM SUPABASE ======================
   useEffect(() => {
     async function loadData() {
+      setLoading(true);
       const { data, error } = await supabase.from("products").select("*");
 
-      if (!error && data) {
+      if (!error) {
         setProducts(data);
       }
       setLoading(false);
     }
+
     loadData();
   }, []);
 
@@ -42,14 +43,14 @@ export default function ProductsPage() {
       const matchCategory = category ? p.category === category : true;
       const matchStatus = status ? p.status === status : true;
       const matchChannel = channel
-        ? (p.channel || "").toLowerCase().includes(channel.toLowerCase())
+        ? p.channel?.toLowerCase()?.includes(channel.toLowerCase())
         : true;
 
       return matchSearch && matchCategory && matchStatus && matchChannel;
     });
   }, [products, search, category, status, channel]);
 
-  // ====================== UI STYLES ======================
+  // ====================== STYLES (GIỮ NGUYÊN 100%) ======================
   const pageStyle = { padding: "32px 40px", fontFamily: "system-ui" };
   const headerStyle = { marginBottom: 24 };
   const titleStyle = { fontSize: 32, fontWeight: 700, marginBottom: 8 };
@@ -167,11 +168,7 @@ export default function ProductsPage() {
     cursor: "pointer",
   };
 
-  // ====================== UI ======================
-  if (loading) {
-    return <div style={{ padding: 40 }}>Đang tải dữ liệu…</div>;
-  }
-
+  // ====================== RENDER UI ======================
   return (
     <div style={pageStyle}>
       <header style={headerStyle}>
@@ -182,22 +179,13 @@ export default function ProductsPage() {
       {/* Toolbar */}
       <div style={toolbarStyle}>
         <div style={{ display: "flex", gap: 8 }}>
-          <button style={btnSecondary}>Xuất file</button>
-          <button style={btnPrimary}>+ Thêm sản phẩm</button>
+          <button type="button" style={btnSecondary}>Xuất file</button>
+          <button type="button" style={btnPrimary}>+ Thêm sản phẩm</button>
         </div>
         <div style={{ fontSize: 13, color: "#6b7280" }}>
           Tổng cộng <strong>{products.length}</strong> sản phẩm
         </div>
       </div>
-
-      {/* Stats (demo static) */}
-      <section style={statsGridStyle}>
-        <div style={statCardStyle}>
-          <div style={statLabelStyle}>Tổng số sản phẩm</div>
-          <div style={statValueStyle}>{products.length}</div>
-          <div style={statSubStyle}>+0 so với hôm qua</div>
-        </div>
-      </section>
 
       {/* Filters */}
       <section style={filtersCardStyle}>
@@ -212,15 +200,29 @@ export default function ProductsPage() {
           </div>
 
           <div style={filterItemStyle}>
-            <select
-              style={inputStyle}
-              value={category}
-              onChange={(e) => setCategory(e.target.value)}
-            >
+            <select style={inputStyle} value={category} onChange={(e) => setCategory(e.target.value)}>
               <option value="">Tất cả danh mục</option>
               <option value="Thời trang nam">Thời trang nam</option>
               <option value="Thời trang nữ">Thời trang nữ</option>
               <option value="Mỹ phẩm">Mỹ phẩm</option>
+            </select>
+          </div>
+
+          <div style={filterItemStyle}>
+            <select style={inputStyle} value={status} onChange={(e) => setStatus(e.target.value)}>
+              <option value="">Tất cả trạng thái</option>
+              <option value="Đang bán">Đang bán</option>
+              <option value="Sắp hết hàng">Sắp hết hàng</option>
+              <option value="Hết hàng">Hết hàng</option>
+            </select>
+          </div>
+
+          <div style={filterItemStyle}>
+            <select style={inputStyle} value={channel} onChange={(e) => setChannel(e.target.value)}>
+              <option value="">Tất cả kênh bán</option>
+              <option value="Shopee">Shopee</option>
+              <option value="TikTok">TikTok</option>
+              <option value="Website">Website</option>
             </select>
           </div>
         </div>
@@ -235,7 +237,7 @@ export default function ProductsPage() {
                 <th style={thStyle}>Tên sản phẩm</th>
                 <th style={thStyle}>SKU</th>
                 <th style={thStyle}>Danh mục</th>
-                <th style={thStyle}>Giá</th>
+                <th style={thStyle}>Giá bán</th>
                 <th style={thStyle}>Tồn kho</th>
                 <th style={thStyle}>Trạng thái</th>
                 <th style={thStyle}>Kênh bán</th>
@@ -245,25 +247,29 @@ export default function ProductsPage() {
             </thead>
 
             <tbody>
-              {filteredProducts.map((p) => (
-                <tr key={p.id}>
-                  <td style={tdStyle}>{p.name}</td>
-                  <td style={tdStyle}>{p.sku}</td>
-                  <td style={tdStyle}>{p.category}</td>
-                  <td style={tdStyle}>{p.price || "-"}</td>
-                  <td style={tdStyle}>{p.stock || 0}</td>
-                  <td style={tdStyle}>
-                    <span style={statusBadge(p.status || "")}>
-                      {p.status || "—"}
-                    </span>
-                  </td>
-                  <td style={tdStyle}>{p.channel || "—"}</td>
-                  <td style={tdStyle}>{p.updated_at?.slice(0, 10) || "—"}</td>
-                  <td style={tdStyle}>
-                    <button style={actionBtnStyle}>Sửa</button>
-                  </td>
+              {loading ? (
+                <tr>
+                  <td style={tdStyle} colSpan="9">Đang tải dữ liệu...</td>
                 </tr>
-              ))}
+              ) : (
+                filteredProducts.map((p) => (
+                  <tr key={p.id}>
+                    <td style={tdStyle}>{p.name}</td>
+                    <td style={tdStyle}>{p.sku}</td>
+                    <td style={tdStyle}>{p.category}</td>
+                    <td style={tdStyle}>{p.price || "---"}</td>
+                    <td style={tdStyle}>{p.stock || 0}</td>
+                    <td style={tdStyle}>
+                      <span style={statusBadge(p.status)}>{p.status}</span>
+                    </td>
+                    <td style={tdStyle}>{p.channel || "---"}</td>
+                    <td style={tdStyle}>{p.updated_at?.slice(0, 10) || "---"}</td>
+                    <td style={tdStyle}>
+                      <button type="button" style={actionBtnStyle}>Sửa</button>
+                    </td>
+                  </tr>
+                ))
+              )}
             </tbody>
           </table>
         </div>
