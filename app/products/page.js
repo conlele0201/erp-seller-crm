@@ -1,262 +1,359 @@
 // app/products/page.js
 
-const PRODUCTS = [
-  {
-    id: 1,
-    name: "Áo thun nam basic",
-    sku: "TSN-001",
-    category: "Thời trang nam",
-    price: 199000,
-    stock: 54,
-    status: "Đang bán",
-    channels: "Shopee, TikTok",
-    updatedAt: "Hôm nay",
-  },
-  {
-    id: 2,
-    name: "Áo khoác nữ chống nắng",
-    sku: "AKN-002",
-    category: "Thời trang nữ",
-    price: 259000,
-    stock: 32,
-    status: "Đang bán",
-    channels: "Shopee, Lazada",
-    updatedAt: "Hôm nay",
-  },
-  {
-    id: 3,
-    name: "Váy body nữ dự tiệc",
-    sku: "VBD-003",
-    category: "Thời trang nữ",
-    price: 349000,
-    stock: 18,
-    status: "Đang bán",
-    channels: "Facebook, TikTok",
-    updatedAt: "Hôm qua",
-  },
-  {
-    id: 4,
-    name: "Quần jean nam slim fit",
-    sku: "QJN-004",
-    category: "Thời trang nam",
-    price: 299000,
-    stock: 0,
-    status: "Hết hàng",
-    channels: "Shopee",
-    updatedAt: "2 ngày trước",
-  },
-  {
-    id: 5,
-    name: "Đầm maxi đi biển",
-    sku: "DMX-005",
-    category: "Thời trang nữ",
-    price: 329000,
-    stock: 12,
-    status: "Đang bán",
-    channels: "Shopee, TikTok",
-    updatedAt: "Hôm nay",
-  },
-  {
-    id: 6,
-    name: "Áo sơ mi nam công sở",
-    sku: "ASM-006",
-    category: "Thời trang nam",
-    price: 279000,
-    stock: 41,
-    status: "Đang bán",
-    channels: "Shopee, Website",
-    updatedAt: "Hôm qua",
-  },
-  {
-    id: 7,
-    name: "Set đồ ngủ nữ cotton",
-    sku: "SDN-007",
-    category: "Thời trang nữ",
-    price: 239000,
-    stock: 27,
-    status: "Đang bán",
-    channels: "Shopee, TikTok",
-    updatedAt: "3 ngày trước",
-  },
-  {
-    id: 8,
-    name: "Áo polo nam cao cấp",
-    sku: "APO-008",
-    category: "Thời trang nam",
-    price: 319000,
-    stock: 9,
-    status: "Sắp hết hàng",
-    channels: "Shopee",
-    updatedAt: "Hôm nay",
-  },
-  {
-    id: 9,
-    name: "Chân váy chữ A",
-    sku: "CVK-009",
-    category: "Thời trang nữ",
-    price: 259000,
-    stock: 36,
-    status: "Đang bán",
-    channels: "Shopee, Lazada",
-    updatedAt: "Hôm qua",
-  },
-  {
-    id: 10,
-    name: "Áo thun đồng phục nhóm",
-    sku: "TDN-010",
-    category: "Đặt may",
-    price: 189000,
-    stock: 120,
-    status: "Đang bán",
-    channels: "Facebook, Zalo",
-    updatedAt: "Hôm nay",
-  },
-];
-
-function formatCurrency(value) {
-  return value.toLocaleString("vi-VN") + "₫";
-}
-
 export default function ProductsPage() {
-  const totalProducts = PRODUCTS.length;
-  const outOfStock = PRODUCTS.filter((p) => p.stock === 0).length;
-  const lowStock = PRODUCTS.filter((p) => p.stock > 0 && p.stock <= 10).length;
-  const activeProducts = PRODUCTS.filter((p) => p.status === "Đang bán").length;
+  // mock data để anh xem bố cục
+  const stats = [
+    {
+      label: "Tổng số sản phẩm",
+      value: "120",
+      sub: "+5 so với hôm qua",
+    },
+    {
+      label: "Đang bán",
+      value: "98",
+      sub: "+3 sản phẩm mới",
+    },
+    {
+      label: "Sắp hết hàng (≤ 10)",
+      value: "7",
+      sub: "Cần nhập thêm",
+    },
+    {
+      label: "Đang ẩn trên kênh bán",
+      value: "15",
+      sub: "Chưa lên kênh",
+    },
+  ];
+
+  const products = [
+    {
+      name: "Áo thun nam basic",
+      sku: "ATN-001",
+      category: "Thời trang nam",
+      price: "199.000đ",
+      stock: 23,
+      status: "Đang bán",
+      channel: "Shopee, TikTok",
+      updatedAt: "Hôm nay, 10:21",
+    },
+    {
+      name: "Váy body nữ dạ hội",
+      sku: "VBN-014",
+      category: "Thời trang nữ",
+      price: "459.000đ",
+      stock: 8,
+      status: "Sắp hết hàng",
+      channel: "Shopee",
+      updatedAt: "Hôm qua, 21:03",
+    },
+    {
+      name: "Combo chăm sóc da 7 ngày",
+      sku: "CSD-007",
+      category: "Mỹ phẩm",
+      price: "379.000đ",
+      stock: 0,
+      status: "Hết hàng",
+      channel: "Website",
+      updatedAt: "02/12/2025",
+    },
+    {
+      name: "Serum phục hồi da",
+      sku: "SER-022",
+      category: "Mỹ phẩm",
+      price: "289.000đ",
+      stock: 41,
+      status: "Đang bán",
+      channel: "TikTok",
+      updatedAt: "Hôm nay, 08:45",
+    },
+  ];
+
+  // ====== styles (inline, không ảnh hưởng file khác) ======
+  const pageStyle = {
+    padding: "32px 40px",
+    fontFamily: "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+  };
+
+  const headerStyle = {
+    marginBottom: 24,
+  };
+
+  const titleStyle = {
+    fontSize: 32,
+    fontWeight: 700,
+    marginBottom: 8,
+  };
+
+  const subtitleStyle = {
+    fontSize: 16,
+    color: "#4b5563",
+  };
+
+  const toolbarStyle = {
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginTop: 24,
+    marginBottom: 24,
+    gap: 12,
+    flexWrap: "wrap",
+  };
+
+  const btnPrimary = {
+    padding: "8px 16px",
+    borderRadius: 6,
+    border: "none",
+    backgroundColor: "#ef4444",
+    color: "#fff",
+    fontWeight: 600,
+    cursor: "pointer",
+    fontSize: 14,
+  };
+
+  const btnSecondary = {
+    padding: "8px 16px",
+    borderRadius: 6,
+    border: "1px solid #e5e7eb",
+    backgroundColor: "#fff",
+    color: "#111827",
+    fontWeight: 500,
+    cursor: "pointer",
+    fontSize: 14,
+  };
+
+  const statsGridStyle = {
+    display: "grid",
+    gridTemplateColumns: "repeat(4, minmax(0, 1fr))",
+    gap: 16,
+    marginBottom: 24,
+  };
+
+  const statCardStyle = {
+    padding: 16,
+    borderRadius: 12,
+    border: "1px solid #f3f4f6",
+    backgroundColor: "#fff",
+    boxShadow: "0 4px 12px rgba(15,23,42,0.03)",
+  };
+
+  const statLabelStyle = {
+    fontSize: 13,
+    color: "#6b7280",
+    marginBottom: 4,
+  };
+
+  const statValueStyle = {
+    fontSize: 24,
+    fontWeight: 700,
+    marginBottom: 4,
+  };
+
+  const statSubStyle = {
+    fontSize: 12,
+    color: "#16a34a",
+  };
+
+  const filtersCardStyle = {
+    marginTop: 8,
+    marginBottom: 24,
+    padding: 16,
+    borderRadius: 12,
+    border: "1px solid #f3f4f6",
+    backgroundColor: "#fff",
+    boxShadow: "0 4px 12px rgba(15,23,42,0.02)",
+  };
+
+  const filtersRowStyle = {
+    display: "flex",
+    flexWrap: "wrap",
+    gap: 12,
+  };
+
+  const filterItemStyle = {
+    flex: "1 1 200px",
+    minWidth: 200,
+  };
+
+  const inputStyle = {
+    width: "100%",
+    padding: "8px 10px",
+    borderRadius: 6,
+    border: "1px solid #e5e7eb",
+    fontSize: 14,
+  };
+
+  const tableCardStyle = {
+    marginTop: 8,
+    borderRadius: 12,
+    border: "1px solid #f3f4f6",
+    backgroundColor: "#fff",
+    boxShadow: "0 6px 18px rgba(15,23,42,0.04)",
+    overflow: "hidden",
+  };
+
+  const tableWrapperStyle = {
+    width: "100%",
+    overflowX: "auto",
+  };
+
+  const tableStyle = {
+    width: "100%",
+    borderCollapse: "collapse",
+    fontSize: 14,
+  };
+
+  const thStyle = {
+    textAlign: "left",
+    padding: "12px 16px",
+    backgroundColor: "#f9fafb",
+    borderBottom: "1px solid #e5e7eb",
+    whiteSpace: "nowrap",
+    fontWeight: 600,
+    color: "#4b5563",
+  };
+
+  const tdStyle = {
+    padding: "12px 16px",
+    borderBottom: "1px solid #f3f4f6",
+    verticalAlign: "middle",
+  };
+
+  const statusBadge = (status) => {
+    let bg = "#dcfce7";
+    let color = "#166534";
+
+    if (status === "Sắp hết hàng") {
+      bg = "#fef3c7";
+      color = "#92400e";
+    } else if (status === "Hết hàng") {
+      bg = "#fee2e2";
+      color = "#b91c1c";
+    }
+
+    return {
+      display: "inline-block",
+      padding: "4px 10px",
+      borderRadius: 999,
+      fontSize: 12,
+      fontWeight: 600,
+      backgroundColor: bg,
+      color,
+    };
+  };
+
+  const actionBtnStyle = {
+    padding: "4px 10px",
+    borderRadius: 999,
+    border: "1px solid #e5e7eb",
+    backgroundColor: "#fff",
+    fontSize: 13,
+    cursor: "pointer",
+  };
 
   return (
-    <div className="page-container">
-      {/* Tiêu đề trang */}
-      <div className="page-header">
-        <div>
-          <h1 className="page-title">Sản phẩm / Dịch vụ</h1>
-          <p className="page-subtitle">
-            Quản lý toàn bộ sản phẩm đang bán trên các kênh.
-          </p>
-        </div>
+    <div style={pageStyle}>
+      {/* Header */}
+      <header style={headerStyle}>
+        <h1 style={titleStyle}>Sản phẩm / Dịch vụ</h1>
+        <p style={subtitleStyle}>Quản lý toàn bộ sản phẩm đang bán trên các kênh.</p>
+      </header>
 
-        <div className="page-header-actions">
-          <button type="button" className="btn-secondary">
+      {/* Toolbar */}
+      <div style={toolbarStyle}>
+        <div style={{ display: "flex", gap: 8 }}>
+          <button type="button" style={btnSecondary}>
             Xuất file
           </button>
-          <button type="button" className="btn-primary">
+          <button type="button" style={btnPrimary}>
             + Thêm sản phẩm
           </button>
         </div>
-      </div>
-
-      {/* Thống kê nhanh */}
-      <div className="stats-grid">
-        <div className="stat-card">
-          <div className="stat-label">Tổng số sản phẩm</div>
-          <div className="stat-value">{totalProducts}</div>
-          <div className="stat-note">Tất cả trạng thái</div>
-        </div>
-
-        <div className="stat-card">
-          <div className="stat-label">Đang bán</div>
-          <div className="stat-value">{activeProducts}</div>
-          <div className="stat-note">Sản phẩm đang hiển thị trên kênh</div>
-        </div>
-
-        <div className="stat-card">
-          <div className="stat-label">Sắp hết hàng (&lt;= 10)</div>
-          <div className="stat-value">{lowStock}</div>
-          <div className="stat-note">Cần nhập thêm</div>
-        </div>
-
-        <div className="stat-card">
-          <div className="stat-label">Hết hàng</div>
-          <div className="stat-value">{outOfStock}</div>
-          <div className="stat-note">Đang ẩn trên kênh bán</div>
+        <div style={{ fontSize: 13, color: "#6b7280" }}>
+          Tổng cộng <strong>120</strong> sản phẩm đang quản lý
         </div>
       </div>
 
-      {/* Thanh tìm kiếm + lọc */}
-      <div className="products-toolbar">
-        <div className="products-search">
-          <input
-            type="text"
-            placeholder="Tìm theo tên, SKU..."
-            className="input-text"
-          />
-        </div>
+      {/* Stats */}
+      <section style={statsGridStyle}>
+        {stats.map((s) => (
+          <div key={s.label} style={statCardStyle}>
+            <div style={statLabelStyle}>{s.label}</div>
+            <div style={statValueStyle}>{s.value}</div>
+            <div style={statSubStyle}>{s.sub}</div>
+          </div>
+        ))}
+      </section>
 
-        <div className="products-filters">
-          <select className="select-input">
-            <option>Tất cả danh mục</option>
-            <option>Thời trang nam</option>
-            <option>Thời trang nữ</option>
-            <option>Đặt may</option>
-          </select>
-
-          <select className="select-input">
-            <option>Tất cả trạng thái</option>
-            <option>Đang bán</option>
-            <option>Sắp hết hàng</option>
-            <option>Hết hàng</option>
-          </select>
-        </div>
-      </div>
-
-      {/* Bảng sản phẩm */}
-      <div className="card">
-        <div className="card-header">
-          <div className="card-title">Danh sách sản phẩm</div>
-          <div className="card-subtitle">
-            Tổng cộng {totalProducts} sản phẩm
+      {/* Filters */}
+      <section style={filtersCardStyle}>
+        <div style={filtersRowStyle}>
+          <div style={filterItemStyle}>
+            <input
+              style={inputStyle}
+              placeholder="Tìm theo tên, SKU..."
+            />
+          </div>
+          <div style={filterItemStyle}>
+            <select style={inputStyle} defaultValue="">
+              <option value="">Tất cả danh mục</option>
+              <option value="nam">Thời trang nam</option>
+              <option value="nu">Thời trang nữ</option>
+              <option value="my-pham">Mỹ phẩm</option>
+            </select>
+          </div>
+          <div style={filterItemStyle}>
+            <select style={inputStyle} defaultValue="">
+              <option value="">Tất cả trạng thái</option>
+              <option value="active">Đang bán</option>
+              <option value="low">Sắp hết hàng</option>
+              <option value="out">Hết hàng</option>
+              <option value="hidden">Đang ẩn</option>
+            </select>
+          </div>
+          <div style={filterItemStyle}>
+            <select style={inputStyle} defaultValue="">
+              <option value="">Tất cả kênh bán</option>
+              <option value="tiktok">TikTok Shop</option>
+              <option value="shopee">Shopee</option>
+              <option value="website">Website</option>
+            </select>
           </div>
         </div>
+      </section>
 
-        <div className="table-wrapper">
-          <table className="table">
+      {/* Table */}
+      <section style={tableCardStyle}>
+        <div style={tableWrapperStyle}>
+          <table style={tableStyle}>
             <thead>
               <tr>
-                <th>Tên sản phẩm</th>
-                <th>SKU</th>
-                <th>Danh mục</th>
-                <th>Giá bán</th>
-                <th>Tồn kho</th>
-                <th>Trạng thái</th>
-                <th>Kênh bán</th>
-                <th>Cập nhật</th>
-                <th>Thao tác</th>
+                <th style={thStyle}>Tên sản phẩm</th>
+                <th style={thStyle}>SKU</th>
+                <th style={thStyle}>Danh mục</th>
+                <th style={thStyle}>Giá bán</th>
+                <th style={thStyle}>Tồn kho</th>
+                <th style={thStyle}>Trạng thái</th>
+                <th style={thStyle}>Kênh bán</th>
+                <th style={thStyle}>Cập nhật</th>
+                <th style={thStyle}>Thao tác</th>
               </tr>
             </thead>
             <tbody>
-              {PRODUCTS.map((product) => (
-                <tr key={product.id}>
-                  <td>
-                    <div className="product-name-cell">
-                      {/* Ảnh demo tạm, sau này mình gắn real image */}
-                      <div className="product-avatar">
-                        {product.name.charAt(0)}
-                      </div>
-                      <div>
-                        <div className="product-name">{product.name}</div>
-                        <div className="product-category">
-                          {product.category}
-                        </div>
-                      </div>
-                    </div>
+              {products.map((p) => (
+                <tr key={p.sku}>
+                  <td style={tdStyle}>{p.name}</td>
+                  <td style={tdStyle}>{p.sku}</td>
+                  <td style={tdStyle}>{p.category}</td>
+                  <td style={tdStyle}>{p.price}</td>
+                  <td style={tdStyle}>{p.stock}</td>
+                  <td style={tdStyle}>
+                    <span style={statusBadge(p.status)}>{p.status}</span>
                   </td>
-                  <td>{product.sku}</td>
-                  <td>{product.category}</td>
-                  <td>{formatCurrency(product.price)}</td>
-                  <td>{product.stock}</td>
-                  <td>
-                    <span className={`badge status-${statusToClass(product.status)}`}>
-                      {product.status}
-                    </span>
-                  </td>
-                  <td>{product.channels}</td>
-                  <td>{product.updatedAt}</td>
-                  <td>
-                    <button type="button" className="link-button">
+                  <td style={tdStyle}>{p.channel}</td>
+                  <td style={tdStyle}>{p.updatedAt}</td>
+                  <td style={tdStyle}>
+                    <button type="button" style={actionBtnStyle}>
                       Sửa
-                    </button>
-                    <span className="table-action-separator">·</span>
-                    <button type="button" className="link-button danger">
-                      Ẩn
                     </button>
                   </td>
                 </tr>
@@ -264,20 +361,41 @@ export default function ProductsPage() {
             </tbody>
           </table>
         </div>
-      </div>
+
+        {/* Pagination mock */}
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            padding: "12px 16px",
+            fontSize: 13,
+            color: "#6b7280",
+          }}
+        >
+          <span>Hiển thị 1–4 trên 120 sản phẩm</span>
+          <div style={{ display: "flex", gap: 4 }}>
+            <button type="button" style={actionBtnStyle}>
+              &lt;
+            </button>
+            <button
+              type="button"
+              style={{ ...actionBtnStyle, backgroundColor: "#ef4444", color: "#fff", borderColor: "#ef4444" }}
+            >
+              1
+            </button>
+            <button type="button" style={actionBtnStyle}>
+              2
+            </button>
+            <button type="button" style={actionBtnStyle}>
+              3
+            </button>
+            <button type="button" style={actionBtnStyle}>
+              &gt;
+            </button>
+          </div>
+        </div>
+      </section>
     </div>
   );
-}
-
-/**
- * Chuyển trạng thái sang class để CSS dễ style:
- * - Đang bán -> status-active
- * - Sắp hết hàng -> status-warning
- * - Hết hàng -> status-danger
- */
-function statusToClass(status) {
-  if (status === "Đang bán") return "active";
-  if (status === "Sắp hết hàng") return "warning";
-  if (status === "Hết hàng") return "danger";
-  return "default";
 }
