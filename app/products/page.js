@@ -1,56 +1,105 @@
 "use client";
-import { useEffect, useState, useMemo } from "react";
-import { supabase } from "@/lib/supabaseClient";
+
+import { useEffect, useMemo, useState } from "react";
+import { supabase } from "../../lib/supabaseClient"; // <-- CHỈ DÙNG ĐƯỜNG DẪN NÀY
 
 export default function ProductsPage() {
-  // -------------------- STATE --------------------
+  // ====================== STATE ======================
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
 
   const [search, setSearch] = useState("");
   const [category, setCategory] = useState("");
   const [status, setStatus] = useState("");
   const [channel, setChannel] = useState("");
 
-  // -------------------- LOAD DATA --------------------
+  // ====================== FETCH SUPABASE ======================
   useEffect(() => {
-    async function loadProducts() {
+    const fetchProducts = async () => {
       setLoading(true);
+      setError("");
 
-      const { data, error } = await supabase.from("products").select("*");
+      const { data, error } = await supabase
+        .from("products")
+        .select("*")
+        .order("id", { ascending: true });
 
-      if (!error) {
-        setProducts(data);
+      if (error) {
+        console.error("Supabase error:", error);
+        setError("Không tải được danh sách sản phẩm.");
+      } else {
+        setProducts(data || []);
       }
 
       setLoading(false);
-    }
+    };
 
-    loadProducts();
+    fetchProducts();
   }, []);
 
-  // -------------------- FILTER --------------------
+  // ====================== THỐNG KÊ ĐƠN GIẢN TỪ DATA ======================
+  const stats = useMemo(() => {
+    const total = products.length;
+
+    // tạm thời demo: đang bán = tất cả, sắp hết hàng / ẩn = 0
+    return [
+      {
+        label: "Tổng số sản phẩm",
+        value: total.toString(),
+        sub: "+0 so với hôm qua",
+      },
+      {
+        label: "Đang bán",
+        value: total.toString(),
+        sub: "+0 sản phẩm mới",
+      },
+      {
+        label: "Sắp hết hàng (≤ 10)",
+        value: "0",
+        sub: "Cần nhập thêm",
+      },
+      {
+        label: "Đang ẩn trên kênh bán",
+        value: "0",
+        sub: "Chưa lên kênh",
+      },
+    ];
+  }, [products]);
+
+  // ====================== FILTER LOGIC ======================
   const filteredProducts = useMemo(() => {
     return products.filter((p) => {
-      const matchSearch =
-        p.name.toLowerCase().includes(search.toLowerCase()) ||
-        p.sku.toLowerCase().includes(search.toLowerCase());
+      const name = (p.name || "").toLowerCase();
+      const sku = (p.sku || "").toLowerCase();
+      const cat = p.category || "";
+      const stt = p.status || "";
+      const ch = p.channel || "";
 
-      const matchCategory = category ? p.category === category : true;
-      const matchStatus = status ? p.status === status : true;
-      const matchChannel = channel
-        ? (p.channel || "").toLowerCase().includes(channel.toLowerCase())
-        : true;
+      const matchSearch =
+        !search ||
+        name.includes(search.toLowerCase()) ||
+        sku.includes(search.toLowerCase());
+
+      const matchCategory = category ? cat === category : true;
+      const matchStatus = status ? stt === status : true;
+      const matchChannel = channel ? ch.includes(channel) : true;
 
       return matchSearch && matchCategory && matchStatus && matchChannel;
     });
-  }, [search, category, status, channel, products]);
+  }, [products, search, category, status, channel]);
 
-  // -------------------- STYLES (Y NGUYÊN UI CỦA ANH) --------------------
-  const pageStyle = { padding: "32px 40px", fontFamily: "system-ui" };
+  // ====================== STYLES GIỐNG LAYOUT CŨ ======================
+  const pageStyle = {
+    padding: "32px 40px",
+    fontFamily:
+      "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+  };
+
   const headerStyle = { marginBottom: 24 };
   const titleStyle = { fontSize: 32, fontWeight: 700, marginBottom: 8 };
   const subtitleStyle = { fontSize: 16, color: "#4b5563" };
+
   const toolbarStyle = {
     display: "flex",
     justifyContent: "space-between",
@@ -60,6 +109,7 @@ export default function ProductsPage() {
     gap: 12,
     flexWrap: "wrap",
   };
+
   const btnPrimary = {
     padding: "8px 16px",
     borderRadius: 6,
@@ -70,6 +120,7 @@ export default function ProductsPage() {
     cursor: "pointer",
     fontSize: 14,
   };
+
   const btnSecondary = {
     padding: "8px 16px",
     borderRadius: 6,
@@ -80,12 +131,14 @@ export default function ProductsPage() {
     cursor: "pointer",
     fontSize: 14,
   };
+
   const statsGridStyle = {
     display: "grid",
     gridTemplateColumns: "repeat(4, minmax(0, 1fr))",
     gap: 16,
     marginBottom: 24,
   };
+
   const statCardStyle = {
     padding: 16,
     borderRadius: 12,
@@ -93,9 +146,11 @@ export default function ProductsPage() {
     backgroundColor: "#fff",
     boxShadow: "0 4px 12px rgba(15,23,42,0.03)",
   };
+
   const statLabelStyle = { fontSize: 13, color: "#6b7280", marginBottom: 4 };
   const statValueStyle = { fontSize: 24, fontWeight: 700, marginBottom: 4 };
   const statSubStyle = { fontSize: 12, color: "#16a34a" };
+
   const filtersCardStyle = {
     marginTop: 8,
     marginBottom: 24,
@@ -105,8 +160,10 @@ export default function ProductsPage() {
     backgroundColor: "#fff",
     boxShadow: "0 4px 12px rgba(15,23,42,0.02)",
   };
+
   const filtersRowStyle = { display: "flex", flexWrap: "wrap", gap: 12 };
   const filterItemStyle = { flex: "1 1 200px", minWidth: 200 };
+
   const inputStyle = {
     width: "100%",
     padding: "8px 10px",
@@ -114,6 +171,7 @@ export default function ProductsPage() {
     border: "1px solid #e5e7eb",
     fontSize: 14,
   };
+
   const tableCardStyle = {
     marginTop: 8,
     borderRadius: 12,
@@ -122,24 +180,67 @@ export default function ProductsPage() {
     boxShadow: "0 6px 18px rgba(15,23,42,0.04)",
     overflow: "hidden",
   };
-  const tableStyle = { width: "100%", borderCollapse: "collapse", fontSize: 14 };
+
+  const tableWrapperStyle = { width: "100%", overflowX: "auto" };
+
+  const tableStyle = {
+    width: "100%",
+    borderCollapse: "collapse",
+    fontSize: 14,
+  };
+
   const thStyle = {
     textAlign: "left",
     padding: "12px 16px",
     backgroundColor: "#f9fafb",
     borderBottom: "1px solid #e5e7eb",
+    whiteSpace: "nowrap",
     fontWeight: 600,
     color: "#4b5563",
-    whiteSpace: "nowrap",
   };
+
   const tdStyle = {
     padding: "12px 16px",
     borderBottom: "1px solid #f3f4f6",
+    verticalAlign: "middle",
   };
 
+  const statusBadge = (status) => {
+    let bg = "#dcfce7";
+    let color = "#166534";
+
+    if (status === "Sắp hết hàng") {
+      bg = "#fef3c7";
+      color = "#92400e";
+    } else if (status === "Hết hàng") {
+      bg = "#fee2e2";
+      color = "#b91c1c";
+    }
+
+    return {
+      display: "inline-block",
+      padding: "4px 10px",
+      borderRadius: 999,
+      fontSize: 12,
+      fontWeight: 600,
+      backgroundColor: bg,
+      color,
+    };
+  };
+
+  const actionBtnStyle = {
+    padding: "4px 10px",
+    borderRadius: 999,
+    border: "1px solid #e5e7eb",
+    backgroundColor: "#fff",
+    fontSize: 13,
+    cursor: "pointer",
+  };
+
+  // ====================== UI ======================
   return (
     <div style={pageStyle}>
-      {/* HEADER */}
+      {/* Header */}
       <header style={headerStyle}>
         <h1 style={titleStyle}>Sản phẩm / Dịch vụ</h1>
         <p style={subtitleStyle}>
@@ -147,62 +248,43 @@ export default function ProductsPage() {
         </p>
       </header>
 
-      {/* TOOLBAR */}
+      {/* Toolbar */}
       <div style={toolbarStyle}>
         <div style={{ display: "flex", gap: 8 }}>
-          <button style={btnSecondary}>Xuất file</button>
-          <button style={btnPrimary}>+ Thêm sản phẩm</button>
+          <button type="button" style={btnSecondary}>
+            Xuất file
+          </button>
+          <button type="button" style={btnPrimary}>
+            + Thêm sản phẩm
+          </button>
         </div>
         <div style={{ fontSize: 13, color: "#6b7280" }}>
           Tổng cộng <strong>{products.length}</strong> sản phẩm đang quản lý
         </div>
       </div>
 
-      {/* STATS */}
+      {/* Stats */}
       <section style={statsGridStyle}>
-        <div style={statCardStyle}>
-          <div style={statLabelStyle}>Tổng số sản phẩm</div>
-          <div style={statValueStyle}>{products.length}</div>
-          <div style={statSubStyle}>+5 so với hôm qua</div>
-        </div>
-
-        <div style={statCardStyle}>
-          <div style={statLabelStyle}>Đang bán</div>
-          <div style={statValueStyle}>
-            {products.filter((p) => p.status === "Đang bán").length}
+        {stats.map((s) => (
+          <div key={s.label} style={statCardStyle}>
+            <div style={statLabelStyle}>{s.label}</div>
+            <div style={statValueStyle}>{s.value}</div>
+            <div style={statSubStyle}>{s.sub}</div>
           </div>
-          <div style={statSubStyle}>+3 sản phẩm mới</div>
-        </div>
-
-        <div style={statCardStyle}>
-          <div style={statLabelStyle}>Sắp hết hàng (≤10)</div>
-          <div style={statValueStyle}>
-            {products.filter((p) => p.stock <= 10).length}
-          </div>
-          <div style={statSubStyle}>Cần nhập thêm</div>
-        </div>
-
-        <div style={statCardStyle}>
-          <div style={statLabelStyle}>Đang ẩn trên kênh bán</div>
-          <div style={statValueStyle}>
-            {products.filter((p) => p.hidden === true).length}
-          </div>
-          <div style={statSubStyle}>Chưa lên kênh</div>
-        </div>
+        ))}
       </section>
 
-      {/* FILTER */}
+      {/* Filters */}
       <section style={filtersCardStyle}>
         <div style={filtersRowStyle}>
           <div style={filterItemStyle}>
             <input
-              placeholder="Tìm theo tên, SKU..."
               style={inputStyle}
+              placeholder="Tìm theo tên, SKU..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
             />
           </div>
-
           <div style={filterItemStyle}>
             <select
               style={inputStyle}
@@ -215,7 +297,6 @@ export default function ProductsPage() {
               <option value="Mỹ phẩm">Mỹ phẩm</option>
             </select>
           </div>
-
           <div style={filterItemStyle}>
             <select
               style={inputStyle}
@@ -228,7 +309,6 @@ export default function ProductsPage() {
               <option value="Hết hàng">Hết hàng</option>
             </select>
           </div>
-
           <div style={filterItemStyle}>
             <select
               style={inputStyle}
@@ -244,74 +324,74 @@ export default function ProductsPage() {
         </div>
       </section>
 
-      {/* TABLE */}
+      {/* Table */}
       <section style={tableCardStyle}>
-        <table style={tableStyle}>
-          <thead>
-            <tr>
-              <th style={thStyle}>Tên sản phẩm</th>
-              <th style={thStyle}>SKU</th>
-              <th style={thStyle}>Danh mục</th>
-              <th style={thStyle}>Giá bán</th>
-              <th style={thStyle}>Tồn kho</th>
-              <th style={thStyle}>Trạng thái</th>
-              <th style={thStyle}>Kênh bán</th>
-              <th style={thStyle}>Cập nhật</th>
-              <th style={thStyle}>Thao tác</th>
-            </tr>
-          </thead>
-
-          <tbody>
-            {filteredProducts.map((p) => (
-              <tr key={p.id}>
-                <td style={tdStyle}>{p.name}</td>
-                <td style={tdStyle}>{p.sku}</td>
-                <td style={tdStyle}>{p.category}</td>
-                <td style={tdStyle}>{p.price}</td>
-                <td style={tdStyle}>{p.stock}</td>
-                <td style={tdStyle}>
-                  <span
-                    style={{
-                      padding: "4px 10px",
-                      borderRadius: 999,
-                      backgroundColor:
-                        p.status === "Đang bán"
-                          ? "#dcfce7"
-                          : p.status === "Sắp hết hàng"
-                          ? "#fef3c7"
-                          : "#fee2e2",
-                      color:
-                        p.status === "Đang bán"
-                          ? "#166534"
-                          : p.status === "Sắp hết hàng"
-                          ? "#92400e"
-                          : "#b91c1c",
-                      fontWeight: 600,
-                      fontSize: 12,
-                    }}
-                  >
-                    {p.status}
-                  </span>
-                </td>
-                <td style={tdStyle}>{p.channel}</td>
-                <td style={tdStyle}>{p.updated_at || "-"}</td>
-                <td style={tdStyle}>
-                  <button
-                    style={{
-                      padding: "4px 10px",
-                      borderRadius: 999,
-                      border: "1px solid #e5e7eb",
-                      backgroundColor: "#fff",
-                      cursor: "pointer",
-                    }}
-                  >
-                    Sửa
-                  </button>
-                </td>
+        <div style={tableWrapperStyle}>
+          <table style={tableStyle}>
+            <thead>
+              <tr>
+                <th style={thStyle}>Tên sản phẩm</th>
+                <th style={thStyle}>SKU</th>
+                <th style={thStyle}>Danh mục</th>
+                <th style={thStyle}>Giá bán</th>
+                <th style={thStyle}>Tồn kho</th>
+                <th style={thStyle}>Trạng thái</th>
+                <th style={thStyle}>Kênh bán</th>
+                <th style={thStyle}>Cập nhật</th>
+                <th style={thStyle}>Thao tác</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {loading && (
+                <tr>
+                  <td style={tdStyle} colSpan={9}>
+                    Đang tải dữ liệu...
+                  </td>
+                </tr>
+              )}
+
+              {error && !loading && (
+                <tr>
+                  <td style={tdStyle} colSpan={9}>
+                    {error}
+                  </td>
+                </tr>
+              )}
+
+              {!loading &&
+                !error &&
+                filteredProducts.map((p) => (
+                  <tr key={p.id}>
+                    <td style={tdStyle}>{p.name}</td>
+                    <td style={tdStyle}>{p.sku}</td>
+                    <td style={tdStyle}>{p.category}</td>
+                    <td style={tdStyle}>{p.price || "—"}</td>
+                    <td style={tdStyle}>{p.stock || "—"}</td>
+                    <td style={tdStyle}>
+                      <span style={statusBadge(p.status || "Đang bán")}>
+                        {p.status || "Đang bán"}
+                      </span>
+                    </td>
+                    <td style={tdStyle}>{p.channel || "—"}</td>
+                    <td style={tdStyle}>{p.updatedAt || "—"}</td>
+                    <td style={tdStyle}>
+                      <button type="button" style={actionBtnStyle}>
+                        Sửa
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+
+              {!loading && !error && filteredProducts.length === 0 && (
+                <tr>
+                  <td style={tdStyle} colSpan={9}>
+                    Không có sản phẩm nào.
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </table>
+        </div>
       </section>
     </div>
   );
