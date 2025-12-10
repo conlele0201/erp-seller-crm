@@ -14,7 +14,7 @@ export default function AddProduct() {
   const [stock, setStock] = useState("");
   const [status, setStatus] = useState("Đang bán");
   const [channels, setChannels] = useState("");
-  const [imageFile, setImageFile] = useState(null);
+  const [imageFileName, setImageFileName] = useState("");
 
   const [saving, setSaving] = useState(false);
 
@@ -24,19 +24,14 @@ export default function AddProduct() {
       return;
     }
 
-    setSaving(true);
-
-    let image_url = null;
-
-    // ===== UPLOAD FILE LÊN /public/images/products =====
-    if (imageFile) {
-      const fileName = `${Date.now()}-${imageFile.name}`;
-      image_url = `/images/products/${fileName}`;
-
-      // ⚠️ Vercel không cho upload runtime
-      // → Anh phải tự upload file vào GitHub trước (như sản phẩm đầu tiên)
-      // Em chỉ lưu đường dẫn
+    if (!imageFileName) {
+      alert("Anh phải upload hình vào GitHub trước và nhập đúng tên file!");
+      return;
     }
+
+    const image_url = `/images/products/${imageFileName}`;
+
+    setSaving(true);
 
     const { error } = await supabase.from("products").insert([
       {
@@ -54,8 +49,8 @@ export default function AddProduct() {
     setSaving(false);
 
     if (error) {
-      console.error(error);
       alert("Lỗi lưu sản phẩm!");
+      console.error(error);
       return;
     }
 
@@ -63,7 +58,6 @@ export default function AddProduct() {
     router.push("/products");
   };
 
-  const pageStyle = { padding: "32px 64px" };
   const input = {
     width: "100%",
     padding: "10px",
@@ -72,7 +66,9 @@ export default function AddProduct() {
     marginBottom: 16,
     fontSize: 15,
   };
+
   const label = { fontWeight: 600, marginBottom: 6, display: "block" };
+
   const btn = {
     padding: "10px 20px",
     background: "#ef4444",
@@ -85,7 +81,7 @@ export default function AddProduct() {
   };
 
   return (
-    <div style={pageStyle}>
+    <div style={{ padding: "32px 64px" }}>
       <h1 style={{ fontSize: 28, fontWeight: 700, marginBottom: 24 }}>Thêm sản phẩm</h1>
 
       <div style={{ maxWidth: 480 }}>
@@ -119,12 +115,12 @@ export default function AddProduct() {
           onChange={(e) => setChannels(e.target.value)}
         />
 
-        <label style={label}>Hình sản phẩm (chọn file)</label>
+        <label style={label}>Tên file hình (đã upload trong GitHub)</label>
         <input
-          type="file"
-          accept="image/*"
-          style={{ marginBottom: 20 }}
-          onChange={(e) => setImageFile(e.target.files[0])}
+          style={input}
+          placeholder="vd: atn-001.jpg"
+          value={imageFileName}
+          onChange={(e) => setImageFileName(e.target.value)}
         />
 
         <button style={btn} onClick={handleSubmit} disabled={saving}>
