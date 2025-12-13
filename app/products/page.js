@@ -1,3 +1,4 @@
+// app/products/page.js
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
@@ -20,34 +21,69 @@ export default function ProductsPage() {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  // ===== STATUS LIST FROM DB =====
+  const [statusList, setStatusList] = useState([]);
+
   const [search, setSearch] = useState("");
   const [category, setCategory] = useState("");
-  const [status, setStatus] = useState("");
+  const [status, setStatus] = useState(""); // giờ status = status_id
   const [channel, setChannel] = useState("");
 
   // ===== LOAD DATA TỪ SUPABASE =====
   useEffect(() => {
-    const loadProducts = async () => {
+    const loadAll = async () => {
       setLoading(true);
-      const { data, error } = await supabase
+
+      // 1) load statuses
+      const { data: statusData, error: statusErr } = await supabase
+        .from("product_statuses")
+        .select("id, name")
+        .order("name", { ascending: true });
+
+      if (!statusErr && statusData) {
+        setStatusList(statusData);
+      } else {
+        console.error("Load product_statuses error:", statusErr);
+      }
+
+      // 2) load products (join status)
+      // Lưu ý: join theo FK products.status_id -> product_statuses.id
+      const { data: productData, error: productErr } = await supabase
         .from("products")
-        .select("*")
+        .select(
+          `
+          *,
+          product_statuses (
+            id,
+            name
+          )
+        `
+        )
         .order("product_id", { ascending: true });
 
-      if (!error && data) {
-        setProducts(data);
+      if (!productErr && productData) {
+        // normalize: tạo field status_name để UI dùng ổn định
+        const normalized = productData.map((p) => ({
+          ...p,
+          status_name:
+            p?.product_statuses?.name ??
+            p?.status ??
+            "", // fallback nếu DB còn cột status text cũ
+        }));
+        setProducts(normalized);
       } else {
-        console.error("Load products error:", error);
+        console.error("Load products error:", productErr);
       }
+
       setLoading(false);
     };
 
-    loadProducts();
+    loadAll();
   }, []);
 
   // ===== STATS =====
   const totalProducts = products.length;
-  const sellingCount = products.filter((p) => p.status === "Đang bán").length;
+  const sellingCount = products.filter((p) => p.status_name === "Đang bán").length;
   const lowStockCount = products.filter((p) => p.stock !== null && p.stock <= 10).length;
   const hiddenCount = products.filter((p) => !p.channels || p.channels.trim() === "").length;
 
@@ -64,10 +100,8 @@ export default function ProductsPage() {
     [products]
   );
 
-  const statusOptions = useMemo(
-    () => Array.from(new Set(products.map((p) => p.status).filter(Boolean))),
-    [products]
-  );
+  // statusOptions giờ lấy từ DB (product_statuses)
+  const statusOptions = useMemo(() => statusList, [statusList]);
 
   const channelOptions = useMemo(
     () => Array.from(new Set(products.map((p) => p.channels).filter(Boolean))),
@@ -82,7 +116,10 @@ export default function ProductsPage() {
         p.sku?.toLowerCase().includes(search.toLowerCase());
 
       const matchCategory = category ? p.category === category : true;
-      const matchStatus = status ? p.status === status : true;
+
+      // status filter theo status_id
+      const matchStatus = status ? String(p.status_id) === String(status) : true;
+
       const matchChannel = channel
         ? (p.channels || "").toLowerCase().includes(channel.toLowerCase())
         : true;
@@ -307,8 +344,8 @@ export default function ProductsPage() {
             >
               <option value="">Tất cả trạng thái</option>
               {statusOptions.map((s) => (
-                <option key={s} value={s}>
-                  {s}
+                <option key={s.id} value={s.id}>
+                  {s.name}
                 </option>
               ))}
             </select>
@@ -368,11 +405,7 @@ export default function ProductsPage() {
                   <tr key={p.id}>
                     <td style={tdStyle}>
                       {p.image_url ? (
-                        <img
-                          src={p.image_url}
-                          alt={p.name}
-                          style={thumbnailStyle}
-                        />
+                        <img src={p.image_url} alt={p.name} style={thumbnailStyle} />
                       ) : (
                         <div style={thumbnailStyle} />
                       )}
@@ -385,7 +418,7 @@ export default function ProductsPage() {
                     <td style={tdStyle}>{p.stock}</td>
 
                     <td style={tdStyle}>
-                      <span style={statusBadge(p.status)}>{p.status}</span>
+                      <span style={statusBadge(p.status_name)}>{p.status_name || "—"}</span>
                     </td>
 
                     <td style={tdStyle}>{p.channels || "—"}</td>
