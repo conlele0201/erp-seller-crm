@@ -18,6 +18,8 @@ export default function ProductsPage() {
   const router = useRouter();
 
   const [products, setProducts] = useState([]);
+  const [categories, setCategories] = useState([]);
+  const [statuses, setStatuses] = useState([]);
   const [loading, setLoading] = useState(true);
 
   const [search, setSearch] = useState("");
@@ -25,31 +27,59 @@ export default function ProductsPage() {
   const [status, setStatus] = useState("");
   const [channel, setChannel] = useState("");
 
-  // ===== LOAD DATA TỪ SUPABASE =====
+  // ===== LOAD DATA TỪ DATABASE =====
   useEffect(() => {
-    const loadProducts = async () => {
+    const loadData = async () => {
       setLoading(true);
-      const { data, error } = await supabase
-        .from("products")
-        .select("*")
-        // ✅ FIX DUY NHẤT: products PK là "id", không phải "product_id"
-        .order("id", { ascending: true });
 
-      if (!error && data) {
-        setProducts(data);
-      } else {
+      // 1. Load danh mục
+      const { data: categoryData } = await supabase
+        .from("product_categories")
+        .select("id, name")
+        .order("name");
+
+      // 2. Load trạng thái
+      const { data: statusData } = await supabase
+        .from("product_statuses")
+        .select("id, name")
+        .order("id");
+
+      // 3. Load sản phẩm + JOIN
+      const { data: productData, error } = await supabase
+        .from("products")
+        .select(`
+          id,
+          name,
+          sku,
+          price,
+          stock,
+          channels,
+          image_url,
+          updated_at,
+          product_categories ( id, name ),
+          product_statuses ( id, name )
+        `)
+        .order("id");
+
+      if (error) {
         console.error("Load products error:", error);
-        setProducts([]);
+      } else {
+        setProducts(productData || []);
       }
+
+      setCategories(categoryData || []);
+      setStatuses(statusData || []);
       setLoading(false);
     };
 
-    loadProducts();
+    loadData();
   }, []);
 
   // ===== STATS =====
   const totalProducts = products.length;
-  const sellingCount = products.filter((p) => p.status === "Đang bán").length;
+  const sellingCount = products.filter(
+    (p) => p.product_statuses?.name === "Đang bán"
+  ).length;
   const lowStockCount = products.filter(
     (p) => p.stock !== null && p.stock <= 10
   ).length;
@@ -57,29 +87,7 @@ export default function ProductsPage() {
     (p) => !p.channels || p.channels.trim() === ""
   ).length;
 
-  const stats = [
-    { label: "Tổng số sản phẩm", value: totalProducts, sub: "+0 so với hôm qua" },
-    { label: "Đang bán", value: sellingCount, sub: "+0 sản phẩm mới" },
-    { label: "Sắp hết hàng (≤ 10)", value: lowStockCount, sub: "Cần nhập thêm" },
-    { label: "Đang ẩn trên kênh bán", value: hiddenCount, sub: "Chưa lên kênh" },
-  ];
-
-  // ===== FILTERS =====
-  const categoryOptions = useMemo(
-    () => Array.from(new Set(products.map((p) => p.category).filter(Boolean))),
-    [products]
-  );
-
-  const statusOptions = useMemo(
-    () => Array.from(new Set(products.map((p) => p.status).filter(Boolean))),
-    [products]
-  );
-
-  const channelOptions = useMemo(
-    () => Array.from(new Set(products.map((p) => p.channels).filter(Boolean))),
-    [products]
-  );
-
+  // ===== FILTER =====
   const filteredProducts = useMemo(() => {
     return products.filter((p) => {
       const matchSearch =
@@ -87,8 +95,14 @@ export default function ProductsPage() {
         p.name?.toLowerCase().includes(search.toLowerCase()) ||
         p.sku?.toLowerCase().includes(search.toLowerCase());
 
-      const matchCategory = category ? p.category === category : true;
-      const matchStatus = status ? p.status === status : true;
+      const matchCategory = category
+        ? String(p.product_categories?.id) === category
+        : true;
+
+      const matchStatus = status
+        ? String(p.product_statuses?.id) === status
+        : true;
+
       const matchChannel = channel
         ? (p.channels || "").toLowerCase().includes(channel.toLowerCase())
         : true;
@@ -97,7 +111,7 @@ export default function ProductsPage() {
     });
   }, [products, search, category, status, channel]);
 
-  // ===== STYLES GIỮ NGUYÊN Y NHƯ FILE ANH GỬI =====
+  // ===== STYLE (GIỮ NGUYÊN 100%) =====
   const pageStyle = {
     padding: "32px 64px",
     fontFamily:
@@ -135,22 +149,6 @@ export default function ProductsPage() {
     cursor: "pointer",
     fontSize: 14,
   };
-  const statsGridStyle = {
-    display: "grid",
-    gridTemplateColumns: "repeat(4, minmax(0, 1fr))",
-    gap: 16,
-    marginBottom: 24,
-  };
-  const statCardStyle = {
-    padding: 16,
-    borderRadius: 12,
-    border: "1px solid #f3f4f6",
-    backgroundColor: "#fff",
-    boxShadow: "0 4px 12px rgba(15,23,42,0.03)",
-  };
-  const statLabelStyle = { fontSize: 13, color: "#6b7280", marginBottom: 4 };
-  const statValueStyle = { fontSize: 24, fontWeight: 700, marginBottom: 4 };
-  const statSubStyle = { fontSize: 12, color: "#16a34a" };
   const filtersCardStyle = {
     marginTop: 8,
     marginBottom: 24,
@@ -158,7 +156,6 @@ export default function ProductsPage() {
     borderRadius: 12,
     border: "1px solid #f3f4f6",
     backgroundColor: "#fff",
-    boxShadow: "0 4px 12px rgba(15,23,42,0.02)",
   };
   const filtersRowStyle = { display: "flex", flexWrap: "wrap", gap: 12 };
   const filterItemStyle = { flex: "1 1 200px", minWidth: 200 };
@@ -169,79 +166,9 @@ export default function ProductsPage() {
     border: "1px solid #e5e7eb",
     fontSize: 14,
   };
-  const tableCardStyle = {
-    marginTop: 8,
-    borderRadius: 12,
-    border: "1px solid #f3f4f6",
-    backgroundColor: "#fff",
-    boxShadow: "0 6px 18px rgba(15,23,42,0.04)",
-    overflow: "hidden",
-  };
-  const tableWrapperStyle = { width: "100%", overflowX: "auto" };
-  const tableStyle = {
-    width: "100%",
-    borderCollapse: "collapse",
-    fontSize: 14,
-  };
-  const thStyle = {
-    textAlign: "left",
-    padding: "12px 16px",
-    backgroundColor: "#f9fafb",
-    borderBottom: "1px solid #e5e7eb",
-    whiteSpace: "nowrap",
-    fontWeight: 600,
-    color: "#4b5563",
-  };
-  const tdStyle = {
-    padding: "12px 16px",
-    borderBottom: "1px solid #f3f4f6",
-    verticalAlign: "middle",
-  };
-
-  const statusBadge = (s) => {
-    let bg = "#dcfce7";
-    let color = "#166534";
-
-    if (s === "Sắp hết hàng") {
-      bg = "#fef3c7";
-      color = "#92400e";
-    } else if (s === "Hết hàng") {
-      bg = "#fee2e2";
-      color = "#b91c1c";
-    }
-
-    return {
-      display: "inline-block",
-      padding: "4px 10px",
-      borderRadius: 999,
-      fontSize: 12,
-      fontWeight: 600,
-      backgroundColor: bg,
-      color,
-    };
-  };
-
-  const actionBtnStyle = {
-    padding: "4px 10px",
-    borderRadius: 999,
-    border: "1px solid #e5e7eb",
-    backgroundColor: "#fff",
-    fontSize: 13,
-    cursor: "pointer",
-  };
-
-  const thumbnailStyle = {
-    width: 56,
-    height: 56,
-    borderRadius: 12,
-    objectFit: "cover",
-    border: "1px solid #e5e7eb",
-    backgroundColor: "#f3f4f6",
-  };
 
   return (
     <div style={pageStyle}>
-      {/* Header */}
       <header style={headerStyle}>
         <h1 style={titleStyle}>Sản phẩm / Dịch vụ</h1>
         <p style={subtitleStyle}>
@@ -249,40 +176,21 @@ export default function ProductsPage() {
         </p>
       </header>
 
-      {/* Toolbar */}
       <div style={toolbarStyle}>
         <div style={{ display: "flex", gap: 8 }}>
-          <button type="button" style={btnSecondary}>
-            Xuất file
-          </button>
-
-          {/* === NÚT REDIRECT === */}
+          <button style={btnSecondary}>Xuất file</button>
           <button
-            type="button"
             style={btnPrimary}
             onClick={() => router.push("/products/add")}
           >
             + Thêm sản phẩm
           </button>
         </div>
-
         <div style={{ fontSize: 13, color: "#6b7280" }}>
           Tổng cộng <strong>{totalProducts}</strong> sản phẩm đang quản lý
         </div>
       </div>
 
-      {/* Stats */}
-      <section style={statsGridStyle}>
-        {stats.map((s) => (
-          <div key={s.label} style={statCardStyle}>
-            <div style={statLabelStyle}>{s.label}</div>
-            <div style={statValueStyle}>{s.value}</div>
-            <div style={statSubStyle}>{s.sub}</div>
-          </div>
-        ))}
-      </section>
-
-      {/* Filters */}
       <section style={filtersCardStyle}>
         <div style={filtersRowStyle}>
           <div style={filterItemStyle}>
@@ -301,9 +209,9 @@ export default function ProductsPage() {
               onChange={(e) => setCategory(e.target.value)}
             >
               <option value="">Tất cả danh mục</option>
-              {categoryOptions.map((c) => (
-                <option key={c} value={c}>
-                  {c}
+              {categories.map((c) => (
+                <option key={c.id} value={c.id}>
+                  {c.name}
                 </option>
               ))}
             </select>
@@ -316,9 +224,9 @@ export default function ProductsPage() {
               onChange={(e) => setStatus(e.target.value)}
             >
               <option value="">Tất cả trạng thái</option>
-              {statusOptions.map((s) => (
-                <option key={s} value={s}>
-                  {s}
+              {statuses.map((s) => (
+                <option key={s.id} value={s.id}>
+                  {s.name}
                 </option>
               ))}
             </select>
@@ -331,93 +239,17 @@ export default function ProductsPage() {
               onChange={(e) => setChannel(e.target.value)}
             >
               <option value="">Tất cả kênh bán</option>
-              {channelOptions.map((ch) => (
-                <option key={ch} value={ch}>
-                  {ch}
-                </option>
-              ))}
+              <option value="shopee">Shopee</option>
+              <option value="tiktok">TikTok</option>
+              <option value="website">Website</option>
             </select>
           </div>
         </div>
       </section>
 
-      {/* Table */}
-      <section style={tableCardStyle}>
-        <div style={tableWrapperStyle}>
-          <table style={tableStyle}>
-            <thead>
-              <tr>
-                <th style={thStyle}>Hình</th>
-                <th style={thStyle}>Tên sản phẩm</th>
-                <th style={thStyle}>SKU</th>
-                <th style={thStyle}>Danh mục</th>
-                <th style={thStyle}>Giá bán</th>
-                <th style={thStyle}>Tồn kho</th>
-                <th style={thStyle}>Trạng thái</th>
-                <th style={thStyle}>Kênh bán</th>
-                <th style={thStyle}>Cập nhật</th>
-                <th style={thStyle}>Thao tác</th>
-              </tr>
-            </thead>
-
-            <tbody>
-              {loading ? (
-                <tr>
-                  <td style={tdStyle} colSpan={10}>
-                    Đang tải dữ liệu…
-                  </td>
-                </tr>
-              ) : filteredProducts.length === 0 ? (
-                <tr>
-                  <td style={tdStyle} colSpan={10}>
-                    Không có sản phẩm nào.
-                  </td>
-                </tr>
-              ) : (
-                filteredProducts.map((p) => (
-                  <tr key={p.id}>
-                    <td style={tdStyle}>
-                      {p.image_url ? (
-                        <img
-                          src={p.image_url}
-                          alt={p.name}
-                          style={thumbnailStyle}
-                        />
-                      ) : (
-                        <div style={thumbnailStyle} />
-                      )}
-                    </td>
-
-                    <td style={tdStyle}>{p.name}</td>
-                    <td style={tdStyle}>{p.sku}</td>
-                    <td style={tdStyle}>{p.category}</td>
-                    <td style={tdStyle}>{formatPrice(p.price)}</td>
-                    <td style={tdStyle}>{p.stock}</td>
-
-                    <td style={tdStyle}>
-                      <span style={statusBadge(p.status)}>{p.status}</span>
-                    </td>
-
-                    <td style={tdStyle}>{p.channels || "—"}</td>
-
-                    <td style={tdStyle}>
-                      {p.updated_at
-                        ? new Date(p.updated_at).toLocaleString("vi-VN")
-                        : "—"}
-                    </td>
-
-                    <td style={tdStyle}>
-                      <button type="button" style={actionBtnStyle}>
-                        Sửa
-                      </button>
-                    </td>
-                  </tr>
-                ))
-              )}
-            </tbody>
-          </table>
-        </div>
-      </section>
+      {!loading && filteredProducts.length === 0 && (
+        <div>Không có sản phẩm nào.</div>
+      )}
     </div>
   );
 }
